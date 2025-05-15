@@ -18,9 +18,14 @@ SECRET_KEY = 'qcss(9#e6wch%rq2zk8i89d3y=h9-#gt@b@g=69zzj#q_pf!(k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if os.environ.get('ENVIRONMENT') == 'development':
-    DEBUG = True
-else:
     DEBUG = False
+else:
+    DEBUG = True
+
+# if os.environ.get('ENVIRONMENT') == 'development':
+#     DEBUG = True
+# else:
+#     DEBUG = False
 
 ALLOWED_HOSTS=['*']
 
@@ -219,7 +224,7 @@ AWS_QUERYSTRING_AUTH = False
 IMAGEKIT_CACHE_TIMEOUT = None
 # Default bucket settings
 
-AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 # AWS_STORAGE_BUCKET_NAME = os.environ.get('BUCKET_STATIC') #comment
 
 AWS_S3_CUSTOM_DOMAIN = os.environ.get('AWS_S3_CUSTOM_DOMAIN')

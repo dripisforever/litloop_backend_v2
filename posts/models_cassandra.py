@@ -14,7 +14,7 @@ class PostLike(Model):
     username = columns.Text()
     avatar_url = columns.Text()
 
-class PostLikeCount(Model):
+class PostLikeCounter(Model):
     __keyspace__ = 'your_keyspace_name'
 
     post_id = columns.UUID(primary_key=True)

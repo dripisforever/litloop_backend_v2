@@ -29,7 +29,7 @@ class Track(models.Model):
     # apple_music_id = models.CharField(max_length=MAX_LENGTH, null=True, unique=True)
     # isrc           = models.CharField(max_length=MAX_LENGTH, null=True)
 
-    objects = TrackManager()
+    # objects = TrackManager()
 
 
 class TrackLike(models.Model):

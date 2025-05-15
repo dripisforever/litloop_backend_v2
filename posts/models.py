@@ -29,7 +29,12 @@ class Post(models.Model):
     description = models.CharField(max_length=100, blank=True)
     friendly_id = models.CharField(max_length=100, blank=True)
 
-    author      = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE)
+    author      = models.ForeignKey(
+        User,
+        related_name='posts',
+        # on_delete=models.CASCADE
+        on_delete=models.SET_NULL, null=True, blank=True
+    )
     caption     = models.CharField(max_length=50, blank=True)
     image       = models.FileField(upload_to=post_directory_path, blank=True)
     created_at  = models.DateTimeField(auto_now_add=True)
@@ -75,7 +80,7 @@ class Post(models.Model):
                     self.friendly_id = friendly_id
                     break
         super(Post, self).save(*args, **kwargs)
-    
+
 
 
 class PostLike(models.Model):
