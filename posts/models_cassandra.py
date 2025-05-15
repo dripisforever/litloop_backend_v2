@@ -8,17 +8,17 @@ from datetime import datetime
 class PostLike(Model):
     __keyspace__ = 'your_keyspace_name'
 
-    post_id   = columns.UUID(partition_key=True)
-    user_id   = columns.UUID(primary_key=True)
-    liked_at  = columns.DateTime(default=datetime.utcnow)
-    username = columns.Text()
+    post_id    = columns.UUID(partition_key=True)
+    user_id    = columns.UUID(primary_key=True)
+    liked_at   = columns.DateTime(default=datetime.utcnow)
+    username   = columns.Text()
     avatar_url = columns.Text()
 
 class PostLikeCounter(Model):
     __keyspace__ = 'your_keyspace_name'
 
     post_id = columns.UUID(primary_key=True)
-    count = columns.Integer()
+    count   = columns.Integer()
 
 
 
@@ -26,14 +26,14 @@ class PostLikeCounter(Model):
 class PostView(Model):
     __keyspace__ = 'your_keyspace_name'
 
-    post_id   = columns.UUID(partition_key=True)
-    user_id   = columns.UUID(primary_key=True)
-    viewed_at = columns.DateTime(default=datetime.utcnow)
-    username = columns.Text()
+    post_id    = columns.UUID(partition_key=True)
+    user_id    = columns.UUID(primary_key=True)
+    viewed_at  = columns.DateTime(default=datetime.utcnow)
+    username   = columns.Text()
     avatar_url = columns.Text()
 
 class PostViewCount(Model):
     __keyspace__ = 'your_keyspace_name'
 
     post_id = columns.UUID(primary_key=True)
-    count = columns.Integer()
+    count   = columns.Integer()
