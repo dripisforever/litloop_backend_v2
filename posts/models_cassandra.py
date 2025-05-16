@@ -21,13 +21,13 @@ class PostLikeCounter(Model):
     count   = columns.Integer()
 
 
-
 # ===== Views ===== #
 class PostView(Model):
     __keyspace__ = 'your_keyspace_name'
 
     post_id    = columns.UUID(partition_key=True)
     user_id    = columns.UUID(primary_key=True)
+    
     viewed_at  = columns.DateTime(default=datetime.utcnow)
     username   = columns.Text()
     avatar_url = columns.Text()
