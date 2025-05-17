@@ -1,6 +1,9 @@
 from django.http import JsonResponse
 from posts.models_cassandra import PostLikeCounter
 from uuid import UUID
+import redis
+
+redis_client = redis.StrictRedis(host='localhost', port=6379, db=0, decode_responses=True)
 
 def get_like_count_cached(post_id):
     redis_key = f"post:{post_id}:like_count"

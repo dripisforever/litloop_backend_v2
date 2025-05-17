@@ -32,9 +32,9 @@ class Post(models.Model):
     )
 
 
-    likes_count = models.IntegerField(default=0)
-    dislikes_count = models.IntegerField(default=0)
-    views_count = models.IntegerField(default=0)
+    likes_count       = models.IntegerField(default=0)
+    dislikes_count    = models.IntegerField(default=0)
+    views_count       = models.IntegerField(default=0)
     impressions_count = models.IntegerField(default=0)
 
     created_at  = models.DateTimeField(auto_now_add=True)
