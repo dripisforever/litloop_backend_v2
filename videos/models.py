@@ -1,5 +1,6 @@
 from django.db import models
 from posts.helpers import original_media_file_path, original_thumbnail_file_path
+from users.models import User
 
 class Video(models.Model):
     s3_key      = models.CharField(max_length=400, null=True, blank=True)

@@ -6,6 +6,7 @@ from django.urls import path
 
 from videos.spot import views_spot
 from videos.upload import s3_views
+from videos import views
 # from . import management_views, views
 # from . import views
 # from .feeds import IndexRSSFeed, SearchRSSFeed
@@ -21,7 +22,7 @@ urlpatterns = [
     # ===== VideoWatchHistory =====#
     path('api/save_playback/', views.save_playback_time),
     path('api/get_playback_time/', views.get_playback_time),
-    
+
 
     # API VIEWS
     # path('api/v1/search', views.MediaSearch.as_view()),
