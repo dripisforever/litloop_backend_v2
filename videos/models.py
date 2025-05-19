@@ -23,12 +23,22 @@ class Video(models.Model):
     # user = models.ForeignKey('users.User', on_delete=models.CASCADE, blank=True)
 
 
+class VideoWatchProgress(models.Model):
+    user          = models.ForeignKey(User, on_delete=models.CASCADE)
+    video         = models.ForeignKey(Video, on_delete=models.CASCADE)
+    playback_time = models.FloatField(default=0.0)
+    updated_at    = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('user', 'video')
+
+
 class VideoPlaylist(models.Model):
     title  = models.CharField(max_length=900, null=True, blank=True)
     videos = models.ManyToManyField(Video, through='VideoPlaylistItem')
 
 class VideoPlaylistItem(models.Model):
 
-    video = models.ForeignKey(Video, on_delete=models.CASCADE)
+    video    = models.ForeignKey(Video, on_delete=models.CASCADE)
     playlist = models.ForeignKey(VideoPlaylist, on_delete=models.CASCADE)
     ordering = models.IntegerField(default=1)

@@ -18,6 +18,11 @@ urlpatterns = [
     path('get_presigned_url/', s3_views.get_presigned_url  ),
     path('complete_upload/', s3_views.complete_upload  ),
 
+    # ===== VideoWatchHistory =====#
+    path('api/save_playback/', views.save_playback_time),
+    path('api/get_playback_time/', views.get_playback_time),
+    
+
     # API VIEWS
     # path('api/v1/search', views.MediaSearch.as_view()),
     # path('api/v1/video', views.MediaList.as_view()),
