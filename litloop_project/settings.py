@@ -1,7 +1,11 @@
 import os
+from dotenv import load_dotenv
 import datetime
 from pathlib import Path
 from celery.schedules import crontab
+from dotenv import load_dotenv
+
+load_dotenv()
 # from environ import Env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -17,15 +21,15 @@ SITE_URL = "http://localhost:8000"
 SECRET_KEY = 'qcss(9#e6wch%rq2zk8i89d3y=h9-#gt@b@g=69zzj#q_pf!(k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if os.environ.get('ENVIRONMENT') == 'development':
-    DEBUG = False
-else:
-    DEBUG = True
-
 # if os.environ.get('ENVIRONMENT') == 'development':
-#     DEBUG = True
-# else:
 #     DEBUG = False
+# else:
+#     DEBUG = True
+
+if os.environ.get('ENVIRONMENT') == 'development':
+    DEBUG = True
+else:
+    DEBUG = False
 
 ALLOWED_HOSTS=['*']
 
@@ -225,6 +229,7 @@ IMAGEKIT_CACHE_TIMEOUT = None
 # Default bucket settings
 
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+# AWS_STORAGE_BUCKET_NAME = 'litloop-bucket'
 # AWS_STORAGE_BUCKET_NAME = os.environ.get('BUCKET_STATIC') #comment
 
 AWS_S3_CUSTOM_DOMAIN = os.environ.get('AWS_S3_CUSTOM_DOMAIN')
@@ -372,7 +377,7 @@ CHUNKS_DONE_PARAM_NAME = "done"
 FILE_STORAGE = "django.core.files.storage.DefaultStorage"
 
 X_FRAME_OPTIONS = "ALLOWALL"
-EMAIL_BACKEND = "djcelery_email.backends.CeleryEmailBackend"
+# EMAIL_BACKEND = "djcelery_email.backends.CeleryEmailBackend"
 CELERY_EMAIL_TASK_CONFIG = {
     "queue": "short_tasks",
 }

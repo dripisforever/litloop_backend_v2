@@ -1,0 +1,5 @@
+boto3
+django
+elasticsearch-dsl
+psycopg2
+psycopg-binary
