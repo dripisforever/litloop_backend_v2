@@ -28,10 +28,12 @@ SECRET_KEY = 'qcss(9#e6wch%rq2zk8i89d3y=h9-#gt@b@g=69zzj#q_pf!(k'
 
 if os.environ.get('ENVIRONMENT') == 'development':
     DEBUG = True
+    ALLOWED_HOSTS=['*']
 else:
     DEBUG = False
+    ALLOWED_HOSTS=['*', 'https://litloop.netlify.app']
 
-ALLOWED_HOSTS=['*']
+# ALLOWED_HOSTS=['*']
 
 MINIMUM_RESOLUTIONS_TO_ENCODE = [240, 360]
 # FFMPEG_PATH = 'ffmpeg'
