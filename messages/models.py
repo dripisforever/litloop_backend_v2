@@ -52,8 +52,8 @@ class GPTMessage(models.Model):
     parent_user  = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
 
-    message_text = models.TextField(blank=True)
-    date_posted  = models.DateTimeField(default=timezone.localtime().now)
+    prompt       = models.TextField()
+    created_at   = models.DateTimeField(default=timezone.localtime().now)
 
 
 
