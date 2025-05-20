@@ -10,7 +10,7 @@ from uploader.channels import TaskProgressConsumer
 
 # from users import views as users_views
 # from posts import views as posts_views
- 
+
 # from django.db.models.loading import cache as model_cache
 # if not model_cache.loaded:
 #     model_cache.get_models()
@@ -45,6 +45,7 @@ urlpatterns = [
 
     path('queries/', include('queries.urls')),
     path('websites/', include('websites.urls')),
+    path('messages/', include('messages.urls')),
 
     # path('v1/', include()),
 

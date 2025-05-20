@@ -1,6 +1,6 @@
 # from __future__ import absolute_import
 from django.urls import path
-
+from messages.views import chat_with_gemini
 # from messages.views import (
 #     ChatDetailAPIView,
 #     ChatOffsetAPIView,
@@ -18,4 +18,5 @@ urlpatterns = [
     # path('room/<int:pk>/', RoomDetailView.as_view(), name='room-detail'),
     # path('participant/', ParticipantListView.as_view(), name='participant-list'),
     # path('participant/<int:pk>/', ParticipantDetailView.as_view(), name='participant-detail'),
+    path("chat/", chat_with_gemini),
 ]
