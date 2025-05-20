@@ -6,7 +6,7 @@ from django.views.decorators.http import require_GET
 from google import genai
 
 # Configure Gemini API
-client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+client = genai.Client(api_key=os.getenv("GOOGLE_GEMINI_API_KEY"))
 
 @csrf_exempt
 @require_GET
@@ -17,11 +17,8 @@ def chat_with_gemini(request):
         return HttpResponseBadRequest("Missing 'q' query parameter.")
 
     try:
-        # model = genai.GenerativeModel("gemini-flash")
 
-        response = client.models.generate_content(
-            model='gemini-2.0-flash-001', contents=user_message
-        )
+        response = client.models.generate_content(contents=user_message, model='gemini-2.0-flash-001')
 
         # Message.objects.create(content=response)
         # response = model.generate_content(user_message)
