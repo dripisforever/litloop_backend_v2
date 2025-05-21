@@ -21,8 +21,8 @@ class Movie(models.Model):
     movie_file  = models.FileField(upload_to='uploaded_media/movie', null=True, blank=True)
     poster      = models.FileField(upload_to='uploaded_media/movie/poster', null=True, blank=True)
 
-    views       = models.ManyToManyField(User, through='MovieView', blank=True, related_name='movie_views')
-    impressions = models.ManyToManyField(User, through='MovieImpression', blank=True, related_name='movie_impressions')
+    views       = models.IntegerField(default=0)
+    impressions = models.IntegerField(default=0)
 
     tmdb_id     = models.IntegerField(null=True, blank=True)
     imdb_id     = models.IntegerField(null=True, blank=True)
