@@ -1,10 +1,6 @@
 from django.db import models
 from users.models import User
 
-# Create your models here.
-
-# models.py
-
 
 class WatchlistItem(models.Model):
     user     = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -18,8 +14,9 @@ class Movie(models.Model):
     title       = models.TextField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
-    movie_file  = models.FileField(upload_to='uploaded_media/movie', null=True, blank=True)
-    poster      = models.FileField(upload_to='uploaded_media/movie/poster', null=True, blank=True)
+    movie_file  = models.CharField(max_length=400, null=True)
+    hls_file    = models.CharField(max_length=400, null=True)
+    poster      = models.CharField(max_length=400, null=True)
 
     views       = models.IntegerField(default=0)
     impressions = models.IntegerField(default=0)
