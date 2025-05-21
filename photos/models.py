@@ -13,70 +13,46 @@ class Photo(models.Model):
 
     user            = models.ForeignKey("users.User", on_delete=models.CASCADE)
     title           = models.TextField(blank=True, null=True)
-    photo_file      = models.FileField(upload_to="media_files/photos/")
+
 
     user_featured   = models.BooleanField(default=False)
     friendly_token  = models.CharField(blank=True, max_length=12, db_index=True)
 
-    likes           = models.ManyToManyField(User, through='PhotoLike', blank=True, related_name='photo_likes')
-    dislikes        = models.ManyToManyField(User, through='PhotoDislike', blank=True, related_name='photo_dislikes')
-    views           = models.ManyToManyField(User, through='PhotoView', blank=True, related_name='photo_views')
-    impressions     = models.ManyToManyField(User, through='PhotoImpression', blank=True, related_name='photo_impressions')
+    likes        = models.IntegerField(default=0)
+    dislikes     = models.IntegerField(default=0)
+    views        = models.IntegerField(default=0)
+    impressions  = models.IntegerField(default=0)
 
 
 class PhotoLike(models.Model):
-    photo = models.ForeignKey(Photo, on_delete=models.CASCADE)
+    photo    = models.ForeignKey(Photo, on_delete=models.CASCADE)
     liked_by = models.ForeignKey('users.User', on_delete=models.CASCADE)
 
 class PhotoDislike(models.Model):
-    photo = models.ForeignKey(Photo, on_delete=models.CASCADE)
+    photo      = models.ForeignKey(Photo, on_delete=models.CASCADE)
     dislike_by = models.ForeignKey('users.User', on_delete=models.CASCADE)
 
 class PhotoImpression(models.Model):
     photo = models.ForeignKey(Photo, on_delete=models.CASCADE)
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
+    user  = models.ForeignKey('users.User', on_delete=models.CASCADE)
 
 class PhotoView(models.Model):
     photo = models.ForeignKey(Photo, on_delete=models.CASCADE)
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
+    user  = models.ForeignKey('users.User', on_delete=models.CASCADE)
 
 
 class PhotoAlbum(models.Model):
-    """PhotoAlbums model"""
-
-    add_date = models.DateTimeField(auto_now_add=True, db_index=True)
-    description = models.TextField(blank=True, help_text="description")
+    add_date       = models.DateTimeField(auto_now_add=True, db_index=True)
+    description    = models.TextField(blank=True, help_text="description")
     friendly_token = models.CharField(blank=True, max_length=12, db_index=True)
-    photo = models.ManyToManyField(Photo, through="PhotoAlbumItem", blank=True)
-    title = models.CharField(max_length=100, db_index=True)
-    uid = models.UUIDField(unique=True, default=uuid.uuid4)
-    user = models.ForeignKey("users.User", on_delete=models.CASCADE, db_index=True, related_name="photoalbums")
+    photo          = models.ManyToManyField(Photo, through="PhotoAlbumItem", blank=True)
+    title          = models.CharField(max_length=100, db_index=True)
+
+    user           = models.ForeignKey("users.User", on_delete=models.CASCADE, db_index=True, related_name="photoalbums")
 
     def __str__(self):
         return self.title
 
-    @property
-    def photo_count(self):
-        return self.photo.count()
-
-    def get_absolute_url(self, api=False):
-        if api:
-            return reverse("api_get_photoalbum", kwargs={"friendly_token": self.friendly_token})
-        else:
-            return reverse("get_playlist", kwargs={"friendly_token": self.friendly_token})
-
-    @property
-    def url(self):
-        return self.get_absolute_url()
-
-    @property
-    def api_url(self):
-        return self.get_absolute_url(api=True)
-
-    def user_thumbnail_url(self):
-        if self.user.logo:
-            return helpers.url_from_path(self.user.logo.path)
-        return None
 
     def set_ordering(self, photo, ordering):
         if photo not in self.photo.all():

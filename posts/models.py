@@ -15,10 +15,10 @@ from posts import helpers
 
 
 class Post(models.Model):
-    videos      = models.ManyToManyField(Video, through="PostVideo", blank=True)
-    tracks      = models.ManyToManyField(Track, through="PostTrack", blank=True)
-    photos      = models.ManyToManyField(Photo, through="PostPhoto", blank=True)
-    playlists   = models.ManyToManyField(Playlist, through="PostPlaylist", blank=True)
+    videos      = models.ManyToManyField(Video,    through="PostVideo",    blank=True,    related_name="postvideos")
+    tracks      = models.ManyToManyField(Track,    through="PostTrack",    blank=True,    related_name="posttracks")
+    photos      = models.ManyToManyField(Photo,    through="PostPhoto",    blank=True,    related_name="postphotos")
+    playlists   = models.ManyToManyField(Playlist, through="PostPlaylist", blank=True,    related_name="postplaylists")
 
     title       = models.CharField(max_length=100, blank=True)
     description = models.CharField(max_length=100, blank=True)
@@ -59,7 +59,7 @@ class Post(models.Model):
         super(Post, self).save(*args, **kwargs)
 
 
-
+# ======== POST STATS ======= #
 class PostLike(models.Model):
     post     = models.ForeignKey(Post, on_delete=models.CASCADE)
     user     = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -80,6 +80,7 @@ class PostView(models.Model):
     viewed_at = models.DateTimeField(auto_now_add=True)
 
 
+# ========= POST Attachments ========= #
 class PostPhoto(models.Model):
     post  = models.ForeignKey(Post, on_delete=models.CASCADE)
     photo = models.ForeignKey('photos.Photo', on_delete=models.CASCADE)
