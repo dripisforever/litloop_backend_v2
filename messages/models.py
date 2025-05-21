@@ -9,7 +9,11 @@ from tracks.models import Track
 class GroupChat(models.Model):
     name        = models.SlugField(max_length=20)
     description = models.CharField(blank=True)
-    members     = models.ManyToManyField(User, related_name='group_chats')
+    image_url   = models.CharField(blank=True)
+
+class GroupUser(models.Model):
+    user  = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True )
+    group = models.ForeignKey(GroupChat, on_delete=models.SET_NULL, null=True, blank=True)
 
 
 class MessageTrack(models.Model):
@@ -25,16 +29,16 @@ class MessageTrack(models.Model):
 
 
 class Message(models.Model):
-    parent_group = models.ForeignKey(GroupChat, on_delete=models.CASCADE, related_name="messages")
-    # parent_user = models.ForeignKey(User, on_delete=models.SET(get_sentinal_user))
-    parent_user  = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    group        = models.ForeignKey(GroupChat, on_delete=models.CASCADE, related_name="messages")
+    user         = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
-    message_text = models.TextField(blank=True)
-    date_posted  = models.DateTimeField(default=timezone.localtime().now)
+    text         = models.TextField(blank=True)
     videos       = models.ManyToManyField(Video, through='MessageVideo', related_name='messages', null=True, blank=True, on_delete=models.SET_NULL)
     photos       = models.ManyToManyField(Photo, through='MessagePhoto', related_name='messages', null=True, blank=True, on_delete=models.SET_NULL)
     tracks       = models.ManyToManyField(Track, through='MessageTrack', related_name='messages',null=True, blank=True, on_delete=models.SET_NULL)
     attachments  = models.ManyToManyField(Attachment, blank=True)
+
+    created_at   = models.DateTimeField(default=timezone.localtime().now)
 
 
 class GPTChat(models.Model):

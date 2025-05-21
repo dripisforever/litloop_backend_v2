@@ -60,28 +60,23 @@ LIKES_MODELS = {
 }
 
 LOCAL_APPS = [
-    # 'authentication',
-    # 'auth',
-    'users',
-    'posts',
-    # 'likes',
-    'views',
-    'artists',
-    'tracks',
-    'playlists',
+
     'albums',
-    'images',
-    'videos',
-    'photos',
+    'artists',
     'comments',
-    'uploader',
+    'images',
     'movies',
-    'suggestions',
-
+    'photos',
+    'playlists',
+    'posts',
     'queries',
+    'suggestions',
+    'tracks',
+    'uploader',
+    'users',
+    'videos',
+    'views',
     'websites',
-
-    'litloop_project',
 
 
 ]
