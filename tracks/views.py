@@ -67,18 +67,10 @@ class TrackDetailAPIView(RetrieveAPIView):
             )
         )
         track_info = sp.track(track_uri)
-        # Track.objects.get_or_create(track_info)
-
-        # json_data = json.loads(track_info.read())
-        #
-        #     for track_data in json_data:
-        # track = Track.create(**track_data)
+        
         return Response(track_info)
 
-        # track = Track.create(**track_info)
-        # snippet = Track.objects.get(track_uri=track_uri)
-        # serializer = TracksSerializer(snippet)
-        # return Response(serializer.data)
+
 
 
 class TrackGetOrCreateAPIView(RetrieveAPIView):
@@ -106,7 +98,7 @@ class TrackGetOrCreateAPIView(RetrieveAPIView):
         album_data = sp.album(album_uri)
         album = Album.create(**album_data)
         # spotify_album.delay(**album_data)
-        
+
         track = Track.create(**track_data)
         # spotify_track.delay(**track_data)
 

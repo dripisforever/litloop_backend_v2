@@ -65,6 +65,9 @@ LOCAL_APPS = [
     'artists',
     'comments',
     'images',
+
+    'chats',
+
     'movies',
     'photos',
     'playlists',
@@ -181,6 +184,7 @@ ASGI_APPLICATION = 'litloop_project.asgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
+
         'NAME': 'litloop_db_prod',
         'USER': os.environ.get("POSTGRES_USER"),
         'PASSWORD': os.environ.get("POSTGRES_PASSWORD"),

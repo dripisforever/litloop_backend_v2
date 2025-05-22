@@ -9,14 +9,14 @@ from auth.apis import (
     spotify_callback
 )
 
-from users.urls import CurrentUserViewAPI
+# from users.urls import CurrentUserViewAPI
 from django.urls import path
 
 
 urlpatterns = [
     # GOOGLE OAUTH
     # path('google/', redirect_to_google_oauth_url.as_view() ),
-    path('user', CurrentUserViewAPI.as_view() ),
+    # path('user', CurrentUserViewAPI.as_view() ),
     path('google/callback', GoogleLoginApi.as_view() ),
     path('google/token', GoogleLoginApi.as_view() ),
 

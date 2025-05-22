@@ -45,7 +45,7 @@ urlpatterns = [
 
     path('queries/', include('queries.urls')),
     path('websites/', include('websites.urls')),
-    path('messages/', include('messages.urls')),
+    path('chats/', include('chats.urls')),
 
     # path('v1/', include()),
 

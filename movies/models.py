@@ -14,34 +14,7 @@ class Movie(models.Model):
     views = models.ManyToManyField(User, through='MovieView', blank=True, related_name='movie_views')
     impressions = models.ManyToManyField(User, through='MovieImpression', blank=True, related_name='movie_impressions')
 
-    # @classmethod
-    # def create(cls, **kwargs):
-
-        # from artists.models import Artist
-        # from tracks.models import Track
-        # from images.models import Image
-
-        # current_site = get_current_site(request).domain
-
-        # movie, created = cls.objects.get_or_create(
-        #     tmdb_id = kwargs['id'],
-        #     title = kwargs['name'],
-        # )
-
-
-        # for images_data in kwargs['images']:
-        #     # extract_id_from_url = images_data["url"]
-        #     image, created = Image.objects.get_or_create(
-        #         url = images_data["url"],
-        #         height = images_data["height"],
-        #         width = images_data["width"],
-        #         album_id = album.id,
-        #
-        #     )
-        #
-        #
-        # return movie
-
+    
 
 class MovieImpression(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
