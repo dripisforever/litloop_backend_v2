@@ -1,6 +1,7 @@
 from django_cassandra_engine.models import DjangoCassandraModel
 from cassandra.cqlengine import columns
-from .models import User, Post
+from users.models import User
+from posts.models import Post
 
 class View(DjangoCassandraModel):
     id = columns.UUID(primary_key=True, default=uuid.uuid4)

@@ -2,11 +2,11 @@ from django.db import models
 
 # Create your models here.
 class Website(models.Model):
-    url = models.URLField(blank=True)
-    title = models.TextField(blank=True)
-    body = models.TextField(blank=True)
+    url   = models.URLField(blank=True, null=True)
+    title = models.TextField(blank=True, null=True)
+    body  = models.TextField(blank=True, null=True)
 
-    favicon = models.FileField(upload_to='favicons/', blank=True)
+    favicon    = models.CharField(max_length=400, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
