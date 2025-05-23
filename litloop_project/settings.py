@@ -6,6 +6,12 @@ from celery.schedules import crontab
 from dotenv import load_dotenv
 
 load_dotenv()
+
+AUTHENTICATION_BACKENDS = [
+    'users.backends.EmailOrUsernameBackend',  # your custom backend
+    'django.contrib.auth.backends.ModelBackend',  # optional fallback
+]
+
 # from environ import Env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

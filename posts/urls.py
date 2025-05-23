@@ -26,6 +26,16 @@ from .view import (
     PostLikeView,
     PostLikersView,
 )
+from .views_post import (
+     create_post
+)
+from .views_post_list import (
+     list_of_posts
+)
+
+from posts.views_postman import (
+     create_post_with_photos
+)
 from posts.views_base import (
     PostCreateViewV2,
 )
@@ -38,6 +48,9 @@ urlpatterns = [
     path('create/', PostCreateAPIView.as_view(), name="posts"),
     path('create/v2', create_post_with_line_breaks, name="posts"),
     path('create/v3', PostCreateViewV2.as_view(), name="posts"),
+    path('create/v4', create_post, name="posts"),
+    path('create/postman', create_post_with_photos, name="posts"),
+    path('list/', list_of_posts, name="posts"),
 
     path('<int:id>/', PostDetailAPIView.as_view(), name="post"),
     path('<int:id>/like/', PostLikeView.as_view(), name="post-like"),

@@ -8,25 +8,17 @@ s3 = boto3.client("s3", region_name='eu-north-1')
 
 @csrf_exempt
 def start_multipart_upload(request):
-    # if request.method == "POST":
-        # data = json.loads(request.body)
-        # file_name = data["file_name"]
 
-        file_name = request.GET.get('file_name')
-        # upload_id = request.GET.get('upload_id')
+    file_name = request.GET.get('file_name')
 
-        response = s3.create_multipart_upload(Bucket='litloop-bucket', Key=f"videos/{file_name}", ContentType="video/mp4")
-        return JsonResponse({"upload_id": response["UploadId"]})
+    response = s3.create_multipart_upload(Bucket='litloop-bucket', Key=f"videos/{file_name}", ContentType="video/mp4")
+    return JsonResponse({"upload_id": response["UploadId"]})
 
-# create_multipart_upload
-# generate_presigned_url
-# complete_multipart_upload
+
 @csrf_exempt
 def get_presigned_url(request):
-    # if request.method == "POST":
-    # data = json.loads(request.body)
-    # file_name = data["file_name"]
-    # upload_id = data["upload_id"]
+
+
 
     file_name = request.GET.get('file_name')
     upload_id = request.GET.get('upload_id')
@@ -54,15 +46,7 @@ def complete_multipart_upload(request):
 
         parts = sorted(data["parts"], key=lambda p: p["PartNumber"])
 
-        # parts = data["parts"]
-        #
-        # ✅ Ensure ETags are wrapped in double quotes
-        # for part in parts:
-        #     if not part["ETag"].startswith('"'):
-        #         part["ETag"] = f'"{part["ETag"]}"'
-
-        # ✅ Sort parts by PartNumber just in case
-        # parts.sort(key=lambda x: x["PartNumber"])
+     
 
         for part in parts:
             if not part["ETag"].startswith('"'):
