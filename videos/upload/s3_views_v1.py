@@ -4,14 +4,25 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-s3 = boto3.client("s3", region_name='eu-north-1')
+s3 = boto3.client(
+    "s3",
+
+    aws_access_key_id=settings.AWS_ACCESS_KEY_QALYBAY,
+    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY_QALYBAY,
+    region_name=settings.AWS_REGION_QALYBAY
+)
 
 @csrf_exempt
 def start_multipart_upload(request):
 
     file_name = request.GET.get('file_name')
 
-    response = s3.create_multipart_upload(Bucket='litloop-bucket', Key=f"videos/{file_name}", ContentType="video/mp4")
+    response = s3.create_multipart_upload(
+        Bucket=settings.AWS_STORAGE_BUCKET_NAME_QALYBAY,
+        Key=f"videos/{file_name}",
+        ContentType="video/mp4"
+    )
+
     return JsonResponse({"upload_id": response["UploadId"]})
 
 
@@ -27,7 +38,7 @@ def get_presigned_url(request):
     presigned_url = s3.generate_presigned_url(
         "put_object",
         Params={
-            "Bucket": 'litloop-bucket',
+            "Bucket": settings.AWS_STORAGE_BUCKET_NAME_QALYBAY,
             "Key": f"videos/{upload_id}_{file_name}",
             "ContentType": "video/mp4",
         },
@@ -46,7 +57,7 @@ def complete_multipart_upload(request):
 
         parts = sorted(data["parts"], key=lambda p: p["PartNumber"])
 
-     
+
 
         for part in parts:
             if not part["ETag"].startswith('"'):
@@ -55,7 +66,7 @@ def complete_multipart_upload(request):
         # Complete multipart upload
         # s3_client = boto3.client("s3", region_name='eu-north-1')
         s3.complete_multipart_upload(
-            Bucket='litloop-bucket',
+            Bucket=settings.AWS_STORAGE_BUCKET_NAME_QALYBAY,
             Key=f"{file_name}",
             UploadId=upload_id,
             MultipartUpload={"Parts": parts},

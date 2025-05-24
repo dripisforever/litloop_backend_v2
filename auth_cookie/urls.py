@@ -1,5 +1,5 @@
 from django.urls import path
-from auth.apis import (
+from auth_cookie.apis import (
     # LoginApi,
     GoogleLoginApi,
     TwitchLoginApi,

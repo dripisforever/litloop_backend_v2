@@ -225,9 +225,18 @@ DATABASES = {
 # AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
 
 # AWS_REGION = os.environ.get('AWS_REGION')
-AWS_REGION = 'eu-north-1'
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_REGION_DRIPTAMINE           = 'eu-north-1'
+AWS_ACCESS_KEY_DRIPTAMINE       = os.environ.get('AWS_ACCESS_KEY_DRIPTAMINE')
+AWS_SECRET_KEY_DRIPTAMINE       = os.environ.get('AWS_SECRET_KEY_DRIPTAMINE')
+AWS_STORAGE_BUCKET_NAME_DRIPTAMINE   = os.environ.get('AWS_STORAGE_BUCKET_DRIPTAMINE')
+
+
+AWS_REGION_QALYBAY              = 'eu-north-1'
+AWS_ACCESS_KEY_QALYBAY          = os.environ.get('AWS_ACCESS_KEY_QALYBAY')
+AWS_SECRET_KEY_QALYBAY          = os.environ.get('AWS_SECRET_KEY_QALYBAY')
+AWS_STORAGE_BUCKET_NAME_QALYBAY = os.environ.get('AWS_STORAGE_BUCKET_NAME_QALYBAY')
+
+
 
 AWS_S3_USE_SSL = os.environ.get('AWS_S3_USE_SSL', 'false').lower() == 'true'
 AWS_S3_ENDPOINT_URL = os.environ.get('AWS_S3_ENDPOINT_URL')
@@ -235,7 +244,7 @@ AWS_QUERYSTRING_AUTH = False
 IMAGEKIT_CACHE_TIMEOUT = None
 # Default bucket settings
 
-AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+
 # AWS_STORAGE_BUCKET_NAME = 'litloop-bucket'
 # AWS_STORAGE_BUCKET_NAME = os.environ.get('BUCKET_STATIC') #comment
 

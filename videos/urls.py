@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 from django.urls import path
 
 from videos.spot import views_spot
-from videos.upload import s3_views
+from videos.upload import ( s3_views, s3_views_qalybay )
 from videos import views
 # from . import management_views, views
 # from . import views
@@ -15,9 +15,9 @@ urlpatterns = [
 
     path('launch-spot/', views_spot.launch_spot, name='launch_spot'),
 
-    path('create_presigned_url/', s3_views.create_presigned_url  ),
-    path('get_presigned_url/', s3_views.get_presigned_url  ),
-    path('complete_upload/', s3_views.complete_upload  ),
+    path('create_presigned_url/', s3_views_qalybay.create_presigned_url  ),
+    path('get_presigned_url/', s3_views_qalybay.get_presigned_url  ),
+    path('complete_upload/', s3_views_qalybay.complete_upload  ),
 
     # ===== VideoWatchHistory =====#
     path('api/save_playback/', views.save_playback_time),

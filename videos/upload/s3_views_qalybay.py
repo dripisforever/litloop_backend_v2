@@ -14,9 +14,9 @@ logger = logging.getLogger(__name__)
 
 s3 = boto3.client(
     "s3",
-    region_name=settings.AWS_REGION_DRIPTAMINE,
-    aws_access_key_id=settings.AWS_ACCESS_KEY_DRIPTAMINE,
-    aws_secret_access_key=settings.AWS_SECRET_KEY_DRIPTAMINE,
+    region_name=settings.AWS_REGION_QALYBAY,
+    aws_access_key_id=settings.AWS_ACCESS_KEY_QALYBAY,
+    aws_secret_access_key=settings.AWS_SECRET_KEY_QALYBAY,
 
 )
 
@@ -37,7 +37,7 @@ def create_presigned_url(request):
     content_type = str(data["content_type"])
 
     response = s3.create_multipart_upload(
-        Bucket=settings.AWS_STORAGE_BUCKET_NAME_DRIPTAMINE,
+        Bucket=settings.AWS_STORAGE_BUCKET_NAME_QALYBAY,
         Key=filename,
         ContentType=content_type,
     )
@@ -62,7 +62,7 @@ def get_presigned_url(request):
     url = s3.generate_presigned_url(
         ClientMethod="upload_part",
         Params={
-            "Bucket": settings.AWS_STORAGE_BUCKET_NAME_DRIPTAMINE,
+            "Bucket": settings.AWS_STORAGE_BUCKET_NAME_QALYBAY,
             "Key": key,
             "UploadId": upload_id,
             "PartNumber": part_number,
@@ -86,13 +86,13 @@ def complete_upload(request):
     media_type = data["media_type"]
 
     response = s3.complete_multipart_upload(
-        Bucket=settings.AWS_STORAGE_BUCKET_NAME_DRIPTAMINE,
+        Bucket=settings.AWS_STORAGE_BUCKET_NAME_QALYBAY,
         Key=key,
         UploadId=upload_id,
         MultipartUpload={"Parts": parts},
     )
     key = response['Key']
-    cloudfront_url = f"https://d3fxu5f9ok11ds.cloudfront.net/{key}"
+    cloudfront_url = f"https://dgsmmq1mgfewt.cloudfront.net/{key}"
 
     # Object.objects.create()
     # https://chatgpt.com/c/68081760-2fc4-800c-8946-98760a9575f5

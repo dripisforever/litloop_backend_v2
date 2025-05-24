@@ -34,18 +34,28 @@ def fetch_google_user_info(access_token):
 
 def get_or_create_user_from_google_data(google_data):
     """Get or create User from Google profile info."""
-    email = google_data.get("email")
+    google_email = google_data.get("email")
     if not email:
         raise ValueError("Email not found in Google user info")
-    name = google_data.get("name", "")
+
+    google_name    = google_data.get("name", "")
+    google_picture = google_data.get("picture")
+
     user, created = User.objects.get_or_create(
-        email=email,
+        email=google_email,
         defaults={
-            "username": email,  # or generate unique username if needed
-            "first_name": name.split()[0] if name else "",
-            "last_name": " ".join(name.split()[1:]) if name and len(name.split()) > 1 else "",
+            "username": google_email,  # or generate unique username if needed
+            "first_name": google_name.split()[0] if name else "",
+            "last_name": " ".join(google_name.split()[1:]) if google_name and len(google_name.split()) > 1 else "",
+            "avatar": google_picture,
         }
     )
+
+    # If user existed but profile picture has changed, update it:
+    if not created and picture and user.avatar != google_picture:
+        user.avatar = google_picture
+        user.save(update_fields=["avatar"])
+
     return user, created
 
 

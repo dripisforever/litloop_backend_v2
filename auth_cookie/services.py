@@ -42,14 +42,14 @@ def set_jwt_access_cookie(name, access_token, response):
 
     if cookie_name:
         response.set_cookie(
-            cookie_name,
-            # name,
-            access_token,
-            expires=access_token_expiration,
-            secure=cookie_secure,
-            httponly=cookie_httponly,
-            samesite=cookie_samesite,
+            key      = cookie_name,
+            value    = access_token,
+            expires  = access_token_expiration,
+            secure   = cookie_secure,
+            httponly = cookie_httponly,
+            samesite = cookie_samesite,
         )
+        return response
 
 
 def jwt_login(*, response, user):

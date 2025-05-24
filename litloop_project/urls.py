@@ -26,7 +26,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     # path('/', include('media.urls')),
     path('admin/', admin.site.urls),
-    path('auth/', include('auth.urls')),
+    path('auth/', include('auth_cookie.urls')),
 
     path('fu/', include("uploader.urls", namespace='fineuploader')),
     path('ws/', include("uploader.urls", namespace='websocket')),
