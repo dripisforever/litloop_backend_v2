@@ -1,5 +1,6 @@
 import boto3
 import uuid
+from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -9,8 +10,14 @@ from posts.models import Post, PostPhoto
 from photos.models import Photo
 from users.auth_utils import jwt_required
 
-bucket_name = 'litloop-bucket'
-s3 = boto3.client("s3", region_name='eu-north-1')
+# bucket_name = 'litloop-bucket'
+s3 = boto3.client(
+    's3',
+    aws_access_key_id=settings.AWS_ACCESS_KEY_QALYBAY,
+    aws_secret_access_key=settings.AWS_SECRET_KEY_QALYBAY,
+    region_name=settings.AWS_REGION_QALYBAY
+)
+bucket_name = settings.AWS_STORAGE_BUCKET_NAME_QALYBAY
 
 @csrf_exempt
 @jwt_required

@@ -27,13 +27,8 @@ def create_presigned_url(request):
     Step 1: Initiate multipart upload.
     """
     data = request.data
-    # filename = data["filename"]
-    # content_type = data["content_type"]
 
-    # logger.debug(f"Filename type: {type(filename)}, value: {filename}")
-    # logger.debug(f"Content type: {type(content_type)}, value: {content_type}")
-
-    filename = str(data["filename"])
+    filename     = str(data["filename"])
     content_type = str(data["content_type"])
 
     response = s3.create_multipart_upload(
@@ -136,10 +131,6 @@ def complete_upload(request):
         return JsonResponse({"error": f"Missing cloudfront_url: {str(e)}"}, status=500)
 
 
-    # return JsonResponse({
-    #     "message": "Upload completed successfully",
-    #     "location": cloudfront_url,
-    #
-    #     # "location": response["Location"],
-    #     "key": key,
-    # })
+def create_video(request):
+    title = request.POST.get('title', '')
+    data = request.data

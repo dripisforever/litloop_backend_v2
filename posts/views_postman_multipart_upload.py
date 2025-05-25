@@ -24,16 +24,6 @@ def create_post_with_photos_and_videos(request):
         author=request.user
     )
 
-    s3 = boto3.client(
-        's3',
-        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-        region_name=settings.AWS_REGION
-    )
-    bucket_name = settings.AWS_STORAGE_BUCKET_NAME
-
-
-
     # Upload photos
     photos_files = request.FILES.getlist('photos')
     for file in photos_files:
@@ -45,6 +35,7 @@ def create_post_with_photos_and_videos(request):
         Photo.objects.create(post=post, s3_key=s3_key)
 
         PostPhoto.objects.create(post=post, photo=photo, order=i+1)
+
     # Upload videos
     videos_files = request.FILES.getlist('videos')
     for file in videos_files:
@@ -56,5 +47,5 @@ def create_post_with_photos_and_videos(request):
         Video.objects.create(post=post, s3_key=s3_key)
 
         PostVideo.objects.create(post=post, video=video, order=i+1)
-        
+
     return JsonResponse({'message': 'Post created successfully', 'post_id': post.id})

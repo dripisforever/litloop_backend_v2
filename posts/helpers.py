@@ -5,6 +5,7 @@ import hashlib
 import json
 import os
 import random
+import string
 import shutil
 import subprocess
 import tempfile
@@ -13,7 +14,7 @@ from fractions import Fraction
 import filetype
 from django.conf import settings
 
-CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+
 
 CRF_ENCODING_NUM_SECONDS = 2  # 0 * 60 # videos with greater duration will get
 # CRF encoding and not two-pass
@@ -213,11 +214,10 @@ def create_temp_dir(suffix=None, dir=settings.TEMP_DIRECTORY):
     return td
 
 
+CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+
 def produce_friendly_token(token_len=settings.FRIENDLY_TOKEN_LEN):
-    token = ""
-    while len(token) != token_len:
-        token += CHARS[random.randint(0, len(CHARS) - 1)]
-    return token
+    return ''.join(random.choices(CHARS, k=token_len))
 
 
 def clean_friendly_token(token):

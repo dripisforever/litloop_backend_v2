@@ -3,11 +3,11 @@ from django.conf import settings
 
 s3 = boto3.client(
     's3',
-    aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-    region_name=settings.AWS_REGION
+    aws_access_key_id=settings.AWS_ACCESS_KEY_QALYBAY,
+    aws_secret_access_key=settings.AWS_SECRET_KEY_QALYBAY,
+    region_name=settings.AWS_REGION_QALYBAY
 )
-bucket_name = settings.AWS_STORAGE_BUCKET_NAME
+bucket_name = settings.AWS_STORAGE_BUCKET_NAME_QALYBAY
 
 def multipart_upload(file_obj, key, content_type):
     # 1. Initiate multipart upload

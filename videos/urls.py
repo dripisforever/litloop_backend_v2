@@ -19,6 +19,11 @@ urlpatterns = [
     path('get_presigned_url/', s3_views_qalybay.get_presigned_url  ),
     path('complete_upload/', s3_views_qalybay.complete_upload  ),
 
+
+    path('create_video/', s3_views_qalybay.create_video  ),
+
+
+
     # ===== VideoWatchHistory =====#
     path('api/save_playback/', views.save_playback_time),
     path('api/get_playback_time/', views.get_playback_time),
