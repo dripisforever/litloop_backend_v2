@@ -94,11 +94,11 @@ def complete_upload(request):
     #
 
     print("media_type:", media_type)
-    print("available models:", {
-        "photo": Photo,
-        "video": Video,
-        "track": Track
-    })
+    # print("available models:", {
+    #     "photo": Photo,
+    #     "video": Video,
+    #     "track": Track
+    # })
     model = {
         "photo": Photo,
         "video": Video,
@@ -114,7 +114,7 @@ def complete_upload(request):
     filename = key.split("/")[-1]
 
     try:
-        obj = model.objects.create(filename=filename, s3_key=key)
+        obj = model.objects.create(filename=filename, s3_key=key, status='draft')
     except Exception as e:
         import traceback
         traceback.print_exc()

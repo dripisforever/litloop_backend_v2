@@ -3,6 +3,13 @@ from posts.helpers import original_media_file_path, original_thumbnail_file_path
 from users.models import User
 
 class Video(models.Model):
+    STATUS_CHOICES = [
+        ('draft', 'Draft'),
+        ('attached', 'Attached'),
+    ]
+
+    status      = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
+
     s3_key      = models.CharField(max_length=400, null=True, blank=True)
     filename    = models.CharField(max_length=400, null=True, blank=True)
     hls_s3      = models.CharField(max_length=400, null=True, blank=True)

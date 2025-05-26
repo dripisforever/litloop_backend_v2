@@ -1,26 +1,34 @@
 # https://chatgpt.com/c/6832c06f-3110-800c-bd4d-a84a93eb9fc6
-@api_view(['POST'])
+from django.http import JsonResponse
+from videos.models import Video
+from posts.models import Post, PostVideo
+
+
 def create_post_with_video(request):
-    title = request.data.get('title')
-    video_id = request.data.get('video_id')
+
+    video_ids = request.POST.get('video_ids')
+    title     = request.POST.get('title')
 
     if not title or not video_id:
-        return Response({"error": "Missing title or video_id"}, status=400)
+        return JsonResponse({"error": "Missing title or video_id"}, status=400)
 
     try:
         video = Video.objects.get(id=video_id, status='draft')
     except Video.DoesNotExist:
-        return Response({"error": "Invalid or already used video"}, status=404)
+        return JsonResponse({"error": "Invalid or already used video"}, status=404)
+
+    videos = Video.objects.filter(id__in=video_ids, status='draft')
 
     post = Post.objects.create(title=title)
-    PostVideo.objects.create(post=post, video=video)
 
-    video.status = 'attached'
-    video.save(update_fields=['status'])
+    for video in videos:
+        PostVideo.objects.create(post=post, video=video)
+        video.status = 'attached'
+        video.save(update_fields=['status'])
 
-    return Response({
+    return JsonResponse({
         "post_id": post.id,
         "title": post.title,
-        "video_id": video.id,
-        "video_url": video.url
+        "video_id": [video.id for video in videos],
+        "video_url": [video.url for video in videos]
     }, status=201)

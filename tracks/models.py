@@ -9,6 +9,13 @@ class SpotifyTrack(models.Model):
     filename     = models.CharField(max_length=400)
 
 class Track(models.Model):
+    STATUS_CHOICES = [
+        ('draft', 'Draft'),
+        ('attached', 'Attached'),
+    ]
+
+    status      = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
+    
     s3_key       = models.CharField(max_length=400, null=True, blank=True)
 
     track_uri    = models.CharField(max_length=400)
