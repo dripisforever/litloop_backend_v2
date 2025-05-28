@@ -14,15 +14,17 @@ class Track(models.Model):
         ('attached', 'Attached'),
     ]
 
-    status      = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
-    
+    status       = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
+
     s3_key       = models.CharField(max_length=400, null=True, blank=True)
+    filename     = models.CharField(max_length=400, null=True, blank=True)
 
     track_uri    = models.CharField(max_length=400)
     name         = models.CharField(max_length=400)
     track_number = models.CharField(max_length=400, default="")
-    artists      = models.ManyToManyField('artists.Artist', related_name='tracks')
-    album        = models.ForeignKey('albums.Album', related_name='tracks', on_delete=models.CASCADE)
+    artists      = models.ManyToManyField('artists.Artist', related_name='tracks', blank=True)
+
+    album = models.ForeignKey('albums.Album', related_name='tracks', on_delete=models.CASCADE, null=True, blank=True)
 
     likes        = models.ManyToManyField('users.User', through='TrackLike', blank=True, related_name='track_likes')
     plays        = models.ManyToManyField('users.User', through='TrackPlay', blank=True, related_name='track_plays')

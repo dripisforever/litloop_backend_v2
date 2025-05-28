@@ -7,8 +7,12 @@ class Video(models.Model):
         ('draft', 'Draft'),
         ('attached', 'Attached'),
     ]
-
+    VISIBILITY_CHOICES = [
+        ('public', 'Public'),
+        ('private', 'Private'),
+    ]
     status      = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
+    visibility  = models.CharField(max_length=20, choices=VISIBILITY_CHOICES, default='private')
 
     s3_key      = models.CharField(max_length=400, null=True, blank=True)
     filename    = models.CharField(max_length=400, null=True, blank=True)

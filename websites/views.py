@@ -92,6 +92,19 @@ class BraveWebsiteSearchView(APIView):
             response = requests.get(url, headers=headers)
             data = response.json()
             results = data['webPages']['value']
+
+
+            raw_results = data.get('webPages', {}).get('value', [])
+
+            results = [
+                {
+                    'url':         item.get('url'),
+                    'title':       item.get('name'),
+                    'description': item.get('snippet')
+
+                }
+                for item in raw_results
+            ]
             return Response({'results': results })
 
         response = requests.get(url, headers=headers)
@@ -99,6 +112,7 @@ class BraveWebsiteSearchView(APIView):
 
         # return Response({'message': 'Scraping initiated. Results will be saved shortly.'})
         results = data['web']['results']
+        # results = data['webPages']['value']
         return Response({'results': results })
         # return Response(data)
 

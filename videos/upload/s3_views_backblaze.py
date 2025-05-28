@@ -11,9 +11,11 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+endpoint_url = 'https://s3.us-west-002.backblazeb2.com'
 
 s3 = boto3.client(
     "s3",
+    endpoint_url=endpoint_url,
     region_name=settings.AWS_REGION_QALYBAY,
     aws_access_key_id=settings.AWS_ACCESS_KEY_QALYBAY,
     aws_secret_access_key=settings.AWS_SECRET_KEY_QALYBAY,
@@ -31,19 +33,9 @@ def create_presigned_url(request):
     filename     = str(data["filename"])
     content_type = str(data["content_type"])
 
-    media_type   = str(data["media_type"])
-
-    if media_type == "photo":
-        key='photo'
-    elif media_type == 'video':
-        key='video'
-    else:
-        key='track'
-
     response = s3.create_multipart_upload(
         Bucket=settings.AWS_STORAGE_BUCKET_NAME_QALYBAY,
-        # Key=filename,
-        Key=f"{key}/{filename}",
+        Key=filename,
         ContentType=content_type,
     )
 

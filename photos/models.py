@@ -14,11 +14,11 @@ class Photo(models.Model):
     ]
 
     status      = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
-    
+
     s3_key          = models.CharField(max_length=400, null=True)
     filename        = models.CharField(max_length=400, null=True)
 
-    user            = models.ForeignKey("users.User", on_delete=models.CASCADE)
+    # user            = models.ForeignKey("users.User", on_delete=models.CASCADE)
     title           = models.TextField(blank=True, null=True)
 
 
