@@ -15,7 +15,7 @@ def create_post_with_photos_and_videos(request):
     if request.method != 'POST':
         return JsonResponse({'error': 'POST required'}, status=405)
 
-    title = request.POST.get('title', '')
+    title       = request.POST.get('title', '')
     description = request.POST.get('description', '')
 
     post = Post.objects.create(
