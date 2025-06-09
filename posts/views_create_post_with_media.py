@@ -19,7 +19,7 @@ def create_post_api(request):
     video_ids = data.get('video_ids', [])
     track_ids = data.get('track_ids', [])
 
-    if not title or not body:
+    if not body:
         return JsonResponse({'error': 'Missing title or body'}, status=400)
 
     post = Post.objects.create(title=title, description=body)

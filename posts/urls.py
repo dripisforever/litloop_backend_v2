@@ -11,6 +11,7 @@ from posts.create_post_with_video import (create_post_with_video)
 from posts.views_post_list import (list_of_posts,post_detail)
 
 from posts.views_search import (SearchTrackView,SearchAlbumView,SearchArtistView,)
+from posts.views_create_post_with_media import (create_post_api,)
 
 urlpatterns = [
 
@@ -20,6 +21,7 @@ urlpatterns = [
     path('create/v4',      create_post, name="posts"),
     path('create/postman', create_post_with_photos, name="posts"),
     path('create/post_with_videos', create_post_with_video, name="posts"),
+    path('create_post_api/', create_post_api, name="posts"),
 
 
     # ──────── VIEW POSTS ────────

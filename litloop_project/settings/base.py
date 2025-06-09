@@ -74,6 +74,8 @@ LOCAL_APPS = [
 
     'chats',
 
+    # 'links',
+
     'movies',
     'photos',
     'playlists',
@@ -187,42 +189,7 @@ ASGI_APPLICATION = 'litloop_project.asgi.application'
 #
 # ]
 # Fetch environment variables for PostgreSQL
-POSTGRES_DB = os.getenv("DB_NAME")
-POSTGRES_PASSWORD = os.getenv("DB_PASSWORD")
-POSTGRES_USER = os.getenv("DB_USER")
-POSTGRES_HOST = os.getenv("DB_HOST")
-POSTGRES_PORT = os.getenv("DB_PORT")
 
-POSTGRES_READY = (
-    POSTGRES_DB is not None
-    and POSTGRES_PASSWORD is not None
-    and POSTGRES_USER is not None
-    and POSTGRES_HOST is not None
-    and POSTGRES_PORT is not None
-)
-
-if POSTGRES_READY:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': POSTGRES_DB,
-            'USER': POSTGRES_USER,
-            'PASSWORD': POSTGRES_PASSWORD,
-            'HOST': POSTGRES_HOST,
-            'PORT': POSTGRES_PORT,
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-
-            'NAME': 'litloop_db_prod',
-            'USER': os.environ.get("POSTGRES_USER"),
-            'PASSWORD': os.environ.get("POSTGRES_PASSWORD"),
-            'HOST': '127.0.0.1',
-            'PORT': '5432'
-        },
 
 # DATABASES = {
 #     'default': {
@@ -255,7 +222,7 @@ else:
     #         },
     #     }
     # }
-}
+# }
 
 SPOTIPY_CLIENT_ID     = os.environ.get('SPOTIFY_CLIENT_ID')
 SPOTIPY_CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')

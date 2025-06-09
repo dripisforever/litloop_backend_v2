@@ -15,7 +15,7 @@ from channels.auth import AuthMiddlewareStack
 from .urls import websocket_urlpatterns
 
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'litloop_project.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', os.getenv('DJANGO_SETTINGS_MODULE', 'litloop_project.settings.dev'))
 
 application = get_asgi_application()
 

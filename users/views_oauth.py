@@ -3,6 +3,7 @@ import requests
 from django.conf import settings
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth import login
+from django.views.decorators.csrf import csrf_exempt
 from users.models import User
 
 
