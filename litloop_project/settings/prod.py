@@ -20,5 +20,5 @@ DATABASES = {
         'PORT': POSTGRES_PORT,
     }
 }
-# DEBUG = False
-# ALLOWED_HOSTS=['https://litloop.netlify.app']
+DEBUG = False
+ALLOWED_HOSTS=['*','https://litloop.netlify.app']
