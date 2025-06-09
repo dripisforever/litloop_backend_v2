@@ -21,7 +21,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m venv env
-        
+
 
 
     - name: Deploy to EC2
@@ -38,9 +38,8 @@ jobs:
           cd /home/ubuntu/litloop_backend_v2
           git pull origin main
           source venv_3.9/bin/activate
-          pip install -r requirements.txt
+          pip install -r requirements/base.txt
           export DJANGO_SETTINGS_MODULE=litloop_backend_v2.settings.prod
           python manage.py migrate
           sudo systemctl restart gunicorn
-          sudo systemctl restart nginx
         EOF
