@@ -45,13 +45,14 @@ jobs:
           if [ ! -d "env" ]; then
             python3 -m venv env
           fi
+          export DJANGO_SETTINGS_MODULE=litloop_project.settings.prod
           source env/bin/activate
 
           # Install requirements
           pip install -r requirements/base.txt
 
           # Django migration
-          export DJANGO_SETTINGS_MODULE=litloop_backend_v2.settings.prod
+          export DJANGO_SETTINGS_MODULE=litloop_project.settings.prod
           python3 manage.py migrate
 
           # Set up Gunicorn
