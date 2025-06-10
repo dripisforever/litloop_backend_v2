@@ -46,8 +46,11 @@ jobs:
         echo "$SSH_PRIVATE_KEY" > key.pem
         chmod 600 key.pem
 
+        # Add EC2 host key to known_hosts to avoid verification issues
+        ssh-keyscan -H $EC2_PUBLIC_IP >> ~/.ssh/known_hosts
+
         # Create environment file locally
-        cat > .env << EOF
+        cat > .env << 'EOF'
         DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
         SPOTIPY_CLIENT_ID=${SPOTIPY_CLIENT_ID}
         SPOTIPY_CLIENT_SECRET=${SPOTIPY_CLIENT_SECRET}
