@@ -1,8 +1,7 @@
 import uuid
 
 from django.db import models
-from imagekit.models import ProcessedImageField
-from imagekit.processors import ResizeToFit
+
 
 from posts.helpers import original_media_file_path, original_thumbnail_file_path
 from users.models import User
