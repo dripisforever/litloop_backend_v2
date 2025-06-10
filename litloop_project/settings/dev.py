@@ -20,5 +20,6 @@ DATABASES = {
         'PORT': '5432'
     }
 }
-DEBUG = True
+# DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS=['*']
