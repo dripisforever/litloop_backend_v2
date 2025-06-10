@@ -6,6 +6,10 @@ After=network.target
 User=ubuntu
 Group=www-data
 WorkingDirectory=/home/ubuntu/litloop_backend_v2
+
+Environment=DJANGO_SETTINGS_MODULE=litloop_project.settings.prod
+
+
 ExecStart=/home/ubuntu/litloop_backend_v2/env/bin/gunicorn \
           --access-logfile - \
           --workers 3 \
