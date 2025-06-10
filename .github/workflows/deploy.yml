@@ -47,6 +47,8 @@ jobs:
         chmod 600 key.pem
 
         # Add EC2 host key to known_hosts to avoid verification issues
+        mkdir -p ~/.ssh
+        chmod 700 ~/.ssh
         ssh-keyscan -H $EC2_PUBLIC_IP >> ~/.ssh/known_hosts
 
         # Create environment file locally
