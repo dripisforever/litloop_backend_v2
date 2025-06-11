@@ -11,9 +11,11 @@ from websites.views import (
 # from websites.parser.inject_html import (
 #     ModifyHTMLView
 # )
-from websites.parser.inject_html_undetected import (
-    ModifyHTMLView
-)
+
+# from websites.parser.inject_html_undetected import (
+#     ModifyHTMLView
+# )
+
 # from websites.parser.inject_html_selenium import (
 #     ModifyHTMLView
 # )
@@ -31,7 +33,7 @@ urlpatterns = [
     path('google/custom/search', GoogleCustomSearchImageView.as_view(), name='search' ),
 
 
-    path('url/', ModifyHTMLView.as_view(), name='modify_html'),
+    # path('url/', ModifyHTMLView.as_view(), name='modify_html'),
 
     # localhost:8000/websites/modify?url=https://www.google.com
 ]
