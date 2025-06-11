@@ -12,11 +12,11 @@ Environment=DJANGO_SETTINGS_MODULE=litloop_project.settings.prod
 
 
 ExecStart=/home/ubuntu/litloop_backend_v2/env/bin/gunicorn \
-          --access-logfile - \
-          --workers 3 \
-          --bind unix:/home/ubuntu/litloop_backend_v2/deploy/gunicorn/gunicorn.sock \
-          --group www-data \
-          --mode 664 litloop_project.wsgi:application
+    --access-logfile - \
+    --workers 3 \
+    --bind unix:/home/ubuntu/litloop_backend_v2/deploy/gunicorn/gunicorn.sock \
+    litloop_project.wsgi:application
+
 
 Restart=always
 
