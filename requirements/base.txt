@@ -22,6 +22,7 @@ google-genai
 gunicorn
 m3u8
 psycopg2-binary
+python-dotenv
 py-deezer
 selenium
 spotipy
