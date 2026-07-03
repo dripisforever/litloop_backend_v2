@@ -7,7 +7,8 @@ from django.core.exceptions import ValidationError
 from photos.models import PhotoAlbum, PhotoAlbumItem, Photo
 from posts.helpers import produce_friendly_token
 from users.auth_utils import jwt_required
-from litloop_project.gcs_native_utils import get_gcs_native_client
+from chats.r2_utils import r2_upload_file
+from litloop_project.r2_storage import r2_url
 
 
 @csrf_exempt
@@ -26,18 +27,14 @@ def photo_album_upload_api(request, photo_album_id):
     uploaded_file = request.FILES['file']
     filename = uploaded_file.name
 
-    # Save to GCS
+    # Save to R2
     try:
-        client = get_gcs_native_client()
-        bucket = client.bucket(settings.GCS_BUCKET_NAME)
         key = f"photo/{produce_friendly_token()}_{filename}"
-        blob = bucket.blob(key)
-
-        blob.upload_from_file(uploaded_file, content_type=uploaded_file.content_type)
+        r2_upload_file(uploaded_file, key, uploaded_file.content_type)
 
         photo = Photo.objects.create(
             filename=filename,
-            gcs_key=key,
+            s3_key=key,
             user=request.user,
             status='attached'
         )
@@ -49,7 +46,7 @@ def photo_album_upload_api(request, photo_album_id):
             'photo_id': photo.id,
             'album_id': album.id,
             'item_id': item.id if item else None,
-            'location': f"https://storage.googleapis.com/{settings.GCS_BUCKET_NAME}/{key}"
+            'location': r2_url(key)
         }, status=201)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
@@ -137,21 +134,17 @@ def photo_album_detail_api(request, friendly_token):
         return JsonResponse({'error': 'Only GET allowed'}, status=405)
 
     album = get_object_or_404(PhotoAlbum, friendly_token=friendly_token)
-    bucket = settings.GCS_BUCKET_NAME
 
     items = album.photoalbumitem_set.select_related('photo').order_by('ordering', '-action_date')
     photos = []
     for item in items:
         photo = item.photo
-        url = None
-        if photo.gcs_key:
-            url = f"https://storage.googleapis.com/{bucket}/{photo.gcs_key}"
-        elif photo.s3_key:
-            url = f"https://storage.googleapis.com/{bucket}/{photo.s3_key}"
+        url = r2_url(photo.gcs_key) or r2_url(photo.s3_key)
 
         photos.append({
             'id': photo.id,
             'pk': photo.pk,
+            'r2_url': url,
             'gcs_url': url,
             'image': url,
             'url': url,

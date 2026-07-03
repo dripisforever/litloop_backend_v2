@@ -2,12 +2,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Load .credentials/*.env for local dev
-credentials_dir = Path(__file__).resolve().parent.parent.parent / '.credentials'
-if credentials_dir.exists():
-    for env_file in ['database.env', 'neon.env', 'aws.env', 'google_cloud_storage.env', 'r2.env', 'oauth.env', 'brave.env', 'twitch.env', 'redis.env', 'misc.env']:
-        load_dotenv(credentials_dir / env_file)
-# Also load .env from project root (deployment writes a single .env)
+# Load .env from project root
 load_dotenv(Path(__file__).resolve().parent.parent.parent / '.env')
 
 # ─── SUB-MODULE SETTINGS ───────────────────────────────────────────────────

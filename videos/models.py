@@ -16,6 +16,7 @@ class Video(models.Model):
 
     s3_key      = models.CharField(max_length=400, null=True, blank=True)
     gcs_key     = models.CharField(max_length=400, null=True, blank=True)
+    r2_key      = models.CharField(max_length=400, null=True, blank=True)
     filename    = models.CharField(max_length=400, null=True, blank=True)
     hls_s3      = models.CharField(max_length=400, null=True, blank=True)
 

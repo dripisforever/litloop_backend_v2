@@ -4,7 +4,7 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from users.token_utils import generate_tokens_for_user
 from users.services import user_get_or_create
-from users.avatar_utils import download_and_save_avatar
+from users.upload.gcs.google_avatar_utils import download_and_save_avatar
 from .services import google_get_access_token, google_get_user_info
 
 @csrf_exempt

@@ -38,8 +38,8 @@ def serialize_post(post, request=None):
         'photos': [
             {
                 'id': p['id'],
-                'url': r2_url(p.get('gcs_key')) or r2_url(p.get('s3_key')),
-                'gcs_url': r2_url(p.get('gcs_key')),
+                'r2_url': r2_url(p.get('gcs_key')) or r2_url(p.get('s3_key')),
+                'gcs_url': r2_url(p.get('gcs_key')) or r2_url(p.get('s3_key')),
                 'gcs_key': p['gcs_key'],
                 'title': p['title']
             } for p in photos_data
@@ -47,8 +47,8 @@ def serialize_post(post, request=None):
         'videos': [
             {
                 'id': v['id'],
-                'url': r2_url(v.get('gcs_key')) or r2_url(v.get('s3_key')),
-                'gcs_url': r2_url(v.get('gcs_key')),
+                'r2_url': r2_url(v.get('gcs_key')) or r2_url(v.get('s3_key')),
+                'gcs_url': r2_url(v.get('gcs_key')) or r2_url(v.get('s3_key')),
                 'gcs_key': v['gcs_key'],
                 'thumbnail_url': r2_url(v.get('thumbnail')),
                 'title': v['title']
@@ -57,7 +57,7 @@ def serialize_post(post, request=None):
         'tracks': [
             {
                 'id': t.id,
-                'url': r2_url(t.gcs_key) or r2_url(t.s3_key),
+                'r2_url': r2_url(t.gcs_key) or r2_url(t.s3_key),
                 'gcs_url': r2_url(t.gcs_key),
                 'gcs_key': t.gcs_key,
                 'name': t.name,

@@ -5,8 +5,6 @@ venv_3.9/
 .env
 .env.examples
 
-.credentials/
 dump.rdb
 celerybeat-schedule
-litloop_project/uploaded_media/
-
+uploaded_media/

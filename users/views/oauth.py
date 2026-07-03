@@ -5,7 +5,7 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth import login
 from django.views.decorators.csrf import csrf_exempt
 from users.models import User
-from users.avatar_utils import download_and_save_avatar
+from users.upload.gcs.google_avatar_utils import download_and_save_avatar
 
 
 def exchange_code_for_tokens(code, redirect_uri):

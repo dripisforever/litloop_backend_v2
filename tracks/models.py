@@ -7,6 +7,7 @@ from tracks.managers import TrackManager
 class SpotifyTrack(models.Model):
     s3_key       = models.CharField(max_length=400, null=True, blank=True)
     gcs_key      = models.CharField(max_length=400, null=True, blank=True)
+    r2_key       = models.CharField(max_length=400, null=True, blank=True)
     filename     = models.CharField(max_length=400)
 
 class Track(models.Model):
@@ -19,6 +20,7 @@ class Track(models.Model):
 
     s3_key       = models.CharField(max_length=400, null=True, blank=True)
     gcs_key      = models.CharField(max_length=400, null=True, blank=True)
+    r2_key       = models.CharField(max_length=400, null=True, blank=True)
     filename     = models.CharField(max_length=400, null=True, blank=True)
 
     track_uri    = models.CharField(max_length=400)
@@ -28,8 +30,8 @@ class Track(models.Model):
 
     album        = models.ForeignKey('albums.Album', related_name='tracks', on_delete=models.CASCADE, null=True, blank=True)
 
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at   = models.DateTimeField(auto_now_add=True)
+    updated_at   = models.DateTimeField(auto_now=True)
     release_date = models.DateTimeField(null=True, blank=True)
 
     user         = models.ForeignKey('users.User', related_name='tracks', on_delete=models.CASCADE, null=True, blank=True)

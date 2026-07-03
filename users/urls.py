@@ -19,6 +19,8 @@ from users.views import (
 )
 from users.views.current_user import user_me_view
 from users.views.avatar_upload_no_drf import upload_avatar_view
+from users.upload.gcs.gcs_avatar_views_no_drf import gcs_upload_avatar_view
+from users.upload.r2.r2_avatar_views_no_drf import r2_upload_avatar_view
 
 from movies.views import (get_watchlist, user_watchlist_api)
 
@@ -28,6 +30,11 @@ urlpatterns = [
     path('signin/', signin_view, name='signin'),
     path('me/', user_me_view, name='user_me'),
     path('me/avatar/', upload_avatar_view, name='upload_avatar'),
+
+    # GCS avatar upload
+    path('me/avatar/gcs/', gcs_upload_avatar_view, name='gcs_upload_avatar'),
+    # R2 avatar upload
+    path('me/avatar/r2/', r2_upload_avatar_view, name='r2_upload_avatar'),
 
     path('callback/', signin_view, name='signin_callback'),
     path('token/', google_token_exchange_view, name='google_token_exchange'),

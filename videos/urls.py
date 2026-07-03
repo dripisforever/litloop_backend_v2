@@ -5,7 +5,9 @@ from django.conf.urls.static import static
 from django.urls import path
 
 from videos.spot import views_spot
-from videos.upload import ( s3_views, s3_views_qalybay, gcs_video_views_no_drf as gcs_video_views, gcs_native_video_views_no_drf as gcs_native_video_views )
+from videos.upload.s3 import s3_views, s3_views_qalybay
+from videos.upload.gcs import gcs_video_views_no_drf as gcs_video_views, gcs_native_video_views_no_drf as gcs_native_video_views
+from videos.upload.r2 import r2_video_views_no_drf as r2_video_views
 from videos import views
 # from . import management_views, views
 # from . import views
@@ -27,6 +29,11 @@ urlpatterns = [
     # Native GCS Upload Endpoints (Using google-cloud-storage library)
     path('gcs/native/initiate/', gcs_native_video_views.gcs_native_initiate_video_upload, name='gcs_native_initiate_video'),
     path('gcs/native/complete/', gcs_native_video_views.gcs_native_complete_video_upload, name='gcs_native_complete_video'),
+
+    # R2 Upload Endpoints
+    path('r2/create_presigned_url/', r2_video_views.r2_initiate_video_upload, name='r2_initiate_video'),
+    path('r2/get_presigned_url/', r2_video_views.r2_get_video_part_url, name='r2_get_video_part'),
+    path('r2/complete_upload/', r2_video_views.r2_complete_video_upload, name='r2_complete_video'),
 
     path('create_video/', s3_views_qalybay.create_video  ),
 

@@ -1,0 +1,5 @@
+SUBREDDITS = [
+    'wholesomememes',
+    'memes',
+    'dankmemes',
+]

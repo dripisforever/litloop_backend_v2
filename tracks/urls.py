@@ -8,8 +8,9 @@ from tracks.views.base_no_drf import (
     track_update_view,
     track_delete_view,
 )
-from videos.upload import s3_views_qalybay
-from tracks.upload import gcs_track_views_no_drf as gcs_track_views, gcs_native_track_views_no_drf as gcs_native_track_views
+from videos.upload.s3 import s3_views_qalybay
+from tracks.upload.gcs import gcs_track_views_no_drf as gcs_track_views, gcs_native_track_views_no_drf as gcs_native_track_views
+from tracks.upload.r2 import r2_track_views_no_drf as r2_track_views
 
 urlpatterns = [
     path('create_presigned_url/', s3_views_qalybay.create_presigned_url  ),
@@ -24,6 +25,11 @@ urlpatterns = [
     # Native GCS Upload Endpoints (Using google-cloud-storage library)
     path('gcs/native/initiate/', gcs_native_track_views.gcs_native_initiate_track_upload, name='gcs_native_initiate_track'),
     path('gcs/native/complete/', gcs_native_track_views.gcs_native_complete_track_upload, name='gcs_native_complete_track'),
+
+    # R2 Upload Endpoints
+    path('r2/create_presigned_url/', r2_track_views.r2_initiate_track_upload, name='r2_initiate_track'),
+    path('r2/get_presigned_url/', r2_track_views.r2_get_track_part_url, name='r2_get_track_part'),
+    path('r2/complete_upload/', r2_track_views.r2_complete_track_upload, name='r2_complete_track'),
 
     path('', track_pagination_view, name="tracks_list"),
     path('all', track_all_view, name="tracks_all"),

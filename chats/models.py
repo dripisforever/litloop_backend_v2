@@ -59,6 +59,7 @@ class MessageVoice(models.Model):
 class VoiceMessage(models.Model):
     s3_key       = models.CharField(max_length=400, null=True, blank=True)
     gcs_key      = models.CharField(max_length=400, null=True, blank=True)
+    r2_key       = models.CharField(max_length=400, null=True, blank=True)
     filename     = models.CharField(max_length=400, null=True, blank=True)
     duration     = models.FloatField(default=0.0) # seconds
     user         = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -81,6 +82,9 @@ class VoiceMessage(models.Model):
 
     @property
     def url(self):
+        if self.r2_key:
+            from litloop_project.r2_storage import r2_url
+            return r2_url(self.r2_key)
         if self.gcs_key:
             if self.gcs_key.startswith('http'):
                 return self.gcs_key

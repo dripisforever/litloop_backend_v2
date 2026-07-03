@@ -58,7 +58,7 @@ def serialize_track(track, request=None):
     if not track:
         return None
     
-    gcs_url = r2_url(track.gcs_key)
+    url = r2_url(track.gcs_key) or r2_url(track.s3_key) if hasattr(track, 's3_key') else r2_url(track.gcs_key)
         
     return {
         'id': track.track_uri,
@@ -68,7 +68,8 @@ def serialize_track(track, request=None):
         'track_number': track.track_number,
         'user': serialize_user(track.user, request),
         'artists': [serialize_artist(a, request) for a in track.artists.all()],
-        'gcs_url': gcs_url,
+        'r2_url': url,
+        'gcs_url': url,
         's3_key': getattr(track, 's3_key', None),
         'release_date': track.release_date.isoformat() if getattr(track, 'release_date', None) else None,
     }

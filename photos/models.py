@@ -17,6 +17,7 @@ class Photo(models.Model):
 
     s3_key          = models.CharField(max_length=400, null=True)
     gcs_key         = models.CharField(max_length=400, null=True, blank=True)
+    r2_key          = models.CharField(max_length=400, null=True, blank=True)
     filename        = models.CharField(max_length=400, null=True)
 
     user            = models.ForeignKey("users.User", on_delete=models.CASCADE, null=True, blank=True)

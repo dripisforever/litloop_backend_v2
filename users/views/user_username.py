@@ -122,6 +122,7 @@ def user_username_photos_api(request, username):
         data.append({
             'id': photo.id,
             'pk': photo.pk,
+            'r2_url': url,
             'gcs_url': url,
             'image': url,
             'url': url,
