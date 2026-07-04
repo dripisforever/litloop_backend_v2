@@ -50,8 +50,8 @@ def google_login_api(request):
 
         user, created = user_get_or_create(**profile_data)
 
-        # Download and re-host the Google avatar to GCS
-        if google_picture:
+        # Download and re-host the Google avatar to GCS (only if user has no avatar or still the old Google one)
+        if google_picture and (not user.avatar or user.avatar == google_picture):
             local_avatar = download_and_save_avatar(google_picture, user.id)
             if local_avatar and local_avatar != user.avatar:
                 user.avatar = local_avatar
@@ -130,8 +130,8 @@ def vk_login_api(request):
 
         user, created = user_get_or_create(**profile_data)
 
-        # Download and re-host the VK avatar to GCS
-        if vk_picture:
+        # Download and re-host the VK avatar to GCS (only if user has no avatar or still the old VK one)
+        if vk_picture and (not user.avatar or user.avatar == vk_picture):
             local_avatar = download_and_save_avatar(vk_picture, user.id)
             if local_avatar and local_avatar != user.avatar:
                 user.avatar = local_avatar
