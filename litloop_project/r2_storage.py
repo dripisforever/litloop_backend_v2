@@ -55,17 +55,19 @@ class R2Storage(Storage):
         self._local_fallback = None
 
     def _get_backend(self):
-        if self._local_fallback is not None:
-            return self._local_fallback
         if self._bucket and self._access_key and self._secret_key:
+            if self._local_fallback is not None:
+                return self._local_fallback
             try:
-                return _get_r2_client()
+                client = _get_r2_client()
+                self._local_fallback = client
+                return client
             except Exception as exc:
                 logger.warning("R2 client init failed (%s), falling back to local storage", exc)
-        else:
-            logger.warning("R2 credentials not configured, falling back to local FileSystemStorage")
-        self._local_fallback = FileSystemStorage()
-        return self._local_fallback
+                self._local_fallback = FileSystemStorage()
+                return self._local_fallback
+        logger.warning("R2 credentials not configured, falling back to local FileSystemStorage")
+        return FileSystemStorage()
 
     def _client(self):
         backend = self._get_backend()
