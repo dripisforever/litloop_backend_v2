@@ -18,3 +18,11 @@ THUMBNAIL_UPLOAD_DIR = f"{MEDIA_UPLOAD_DIR}/thumbnails/"
 SUBTITLES_UPLOAD_DIR = f"{MEDIA_UPLOAD_DIR}/subtitles/"
 HLS_DIR = os.path.join(MEDIA_ROOT, "hls/")
 DEFAULT_FILE_STORAGE = "litloop_project.r2_storage.R2Storage"
+STORAGES = {
+    "default": {
+        "BACKEND": "litloop_project.r2_storage.R2Storage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
