@@ -49,13 +49,13 @@ def _public_url(key):
 class R2Storage(Storage):
 
     def __init__(self, *args, **kwargs):
-        self._bucket = settings.R2_BUCKET_NAME
-        self._access_key = settings.R2_ACCESS_KEY_ID
-        self._secret_key = settings.R2_SECRET_ACCESS_KEY
         self._local_fallback = None
 
     def _get_backend(self):
-        if self._bucket and self._access_key and self._secret_key:
+        bucket = settings.R2_BUCKET_NAME
+        access_key = settings.R2_ACCESS_KEY_ID
+        secret_key = settings.R2_SECRET_ACCESS_KEY
+        if bucket and access_key and secret_key:
             if self._local_fallback is not None:
                 return self._local_fallback
             try:
@@ -75,33 +75,36 @@ class R2Storage(Storage):
             return backend
         return backend
 
+    def _bucket_name(self):
+        return settings.R2_BUCKET_NAME
+
     def _save(self, name, content):
         backend = self._get_backend()
         if isinstance(backend, FileSystemStorage):
             return backend._save(name, content)
         content.seek(0)
-        backend.upload_fileobj(content, self._bucket, name)
+        backend.upload_fileobj(content, self._bucket_name(), name)
         return name
 
     def _open(self, name, mode="rb"):
         backend = self._get_backend()
         if isinstance(backend, FileSystemStorage):
             return backend._open(name, mode)
-        obj = backend.get_object(Bucket=self._bucket, Key=name)
+        obj = backend.get_object(Bucket=self._bucket_name(), Key=name)
         return io.BytesIO(obj["Body"].read())
 
     def delete(self, name):
         backend = self._get_backend()
         if isinstance(backend, FileSystemStorage):
             return backend.delete(name)
-        backend.delete_object(Bucket=self._bucket, Key=name)
+        backend.delete_object(Bucket=self._bucket_name(), Key=name)
 
     def exists(self, name):
         backend = self._get_backend()
         if isinstance(backend, FileSystemStorage):
             return backend.exists(name)
         try:
-            backend.head_object(Bucket=self._bucket, Key=name)
+            backend.head_object(Bucket=self._bucket_name(), Key=name)
             return True
         except backend.exceptions.ClientError:
             return False
@@ -116,7 +119,7 @@ class R2Storage(Storage):
         backend = self._get_backend()
         if isinstance(backend, FileSystemStorage):
             return backend.size(name)
-        obj = backend.head_object(Bucket=self._bucket, Key=name)
+        obj = backend.head_object(Bucket=self._bucket_name(), Key=name)
         return obj["ContentLength"]
 
     def get_available_name(self, name, max_length=None):
