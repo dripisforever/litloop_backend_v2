@@ -50,11 +50,12 @@ def google_login_api(request):
 
         user, created = user_get_or_create(**profile_data)
 
-        # Download and re-host the Google avatar to avoid hotlink 429s
-        local_avatar = download_and_save_avatar(google_picture, user.id)
-        if local_avatar != google_picture:
-            user.avatar = local_avatar
-            user.save(update_fields=["avatar"])
+        # Download and re-host the Google avatar to GCS
+        if google_picture:
+            local_avatar = download_and_save_avatar(google_picture, user.id)
+            if local_avatar and local_avatar != user.avatar:
+                user.avatar = local_avatar
+                user.save(update_fields=["avatar"])
         
         # Generate tokens
         tokens = generate_tokens_for_user(user)
@@ -129,10 +130,10 @@ def vk_login_api(request):
 
         user, created = user_get_or_create(**profile_data)
 
-        # Download and re-host the VK avatar
+        # Download and re-host the VK avatar to GCS
         if vk_picture:
             local_avatar = download_and_save_avatar(vk_picture, user.id)
-            if local_avatar != vk_picture:
+            if local_avatar and local_avatar != user.avatar:
                 user.avatar = local_avatar
                 user.save(update_fields=["avatar"])
         
