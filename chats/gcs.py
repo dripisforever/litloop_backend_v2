@@ -97,9 +97,6 @@ def gcs_upload_file(file_obj, destination_blob_name: str, content_type: str = No
     """
     try:
         credentials = gcs_get_credentials()
-        if not credentials.hmac_access_key and not credentials.credentials_json:
-            logger.info("GCS not fully configured, falling back to R2")
-            return _fallback_r2_upload(file_obj, destination_blob_name, content_type)
     except ValueError:
         return _fallback_r2_upload(file_obj, destination_blob_name, content_type)
 
