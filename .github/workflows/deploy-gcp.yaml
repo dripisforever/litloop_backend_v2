@@ -51,7 +51,7 @@ jobs:
         # Execute remote script using EOF
         ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.GCP_USER }}@${{ secrets.GCE_PUBLIC_IP }} << 'EOF'
           cd ~/litloop_backend_v2
-          bash deploy.sh
+          bash deploy/deploy_script.sh
         EOF
 
     - name: Clean up local secrets
