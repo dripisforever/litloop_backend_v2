@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# --- LitLoop Unified Deployment Script ---
-# This script automates the deployment process on a GCP VM.
-
 set -e
 
 echo "🚀 Starting LitLoop Deployment..."
@@ -10,7 +7,7 @@ echo "🚀 Starting LitLoop Deployment..."
 # 1. Environment Check
 if [ ! -f .env ]; then
     echo "❌ Error: .env file not found!"
-    echo "Please create a .env file with GCS_HMAC_ACCESS_KEY, GCS_HMAC_SECRET, etc."
+    echo "Please create a .env file with the required secrets."
     exit 1
 fi
 
@@ -19,11 +16,12 @@ echo "📥 Pulling latest changes..."
 git pull origin main
 
 # 3. Virtual Environment Setup
-if [ ! -d "venv" ]; then
+_VENV="env"
+if [ ! -d "$_VENV" ]; then
     echo "🐍 Creating virtual environment..."
-    python3 -m venv venv
+    python3 -m venv "$_VENV"
 fi
-source venv/bin/activate
+source "$_VENV/bin/activate"
 
 # 4. Install/Update Dependencies
 echo "📦 Installing dependencies..."
@@ -38,11 +36,7 @@ python manage.py migrate --noinput
 echo "🎨 Collecting static files..."
 python manage.py collectstatic --noinput
 
-# 7. Pre-flight Check: GCS Connection
-echo "🔍 Verifying GCS HMAC configuration..."
-python manage.py shell -c "from django.conf import settings; import boto3; client=boto3.client('s3', endpoint_url='https://storage.googleapis.com', aws_access_key_id=settings.GCS_HMAC_ACCESS_KEY, aws_secret_access_key=settings.GCS_HMAC_SECRET); client.list_buckets(); print('✅ GCS HMAC Connection Verified!')" || { echo "❌ GCS HMAC Check Failed. Check your .env keys."; exit 1; }
-
-# 8. Update systemd service files from deploy/
+# 7. Update systemd service files from deploy/
 echo "🚦 Updating systemd service files..."
 sed -i "s|/home/driptamine/litloop_backend_v2|$(pwd)|g" deploy/gunicorn/daphne.service
 sed -i "s|User=driptamine|User=$USER|g" deploy/gunicorn/daphne.service
@@ -54,7 +48,7 @@ sudo cp deploy/gunicorn/gunicorn_http.service /etc/systemd/system/gunicorn_http.
 
 sudo systemctl daemon-reload
 
-# 9. Restart Services
+# 8. Restart Services
 echo "🚦 Restarting services..."
 for service in daphne gunicorn_http; do
     if systemctl is-active --quiet "$service"; then
@@ -67,7 +61,7 @@ for service in daphne gunicorn_http; do
     fi
 done
 
-# 10. Update and restart Nginx
+# 9. Update and restart Nginx
 echo "🌐 Updating Nginx config..."
 sed -i "s|/home/driptamine/litloop_backend_v2|$(pwd)|g" deploy/nginx/django.conf
 sudo cp deploy/nginx/django.conf /etc/nginx/sites-available/litloop.conf
