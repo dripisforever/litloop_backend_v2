@@ -18,7 +18,7 @@ def todo_list_api(request):
 
     background_image_url = None
     if hasattr(user, 'profile') and user.profile.background_image:
-        background_image_url = user.profile.background_image.url
+        background_image_url = user.profile.background_image
 
     data = {
         'todos': todos,
