@@ -78,9 +78,42 @@ def delete_post_no_drf(request, post_id):
 @jwt_optional
 def list_of_posts(request):
     posts = Post.objects.all().order_by('-created_at')
-    # Use paginate_queryset if available, otherwise simple list
     data = [serialize_post(post, request) for post in posts]
     return JsonResponse({'posts': data})
+
+
+@csrf_exempt
+@jwt_optional
+def feed_view(request):
+    page = int(request.GET.get('page', 1))
+    page_size = int(request.GET.get('page_size', 20))
+    page = max(page, 1)
+    page_size = min(max(page_size, 1), 100)
+
+    posts = Post.objects.all().order_by('-created_at')
+    total = posts.count()
+    offset = (page - 1) * page_size
+    page_posts = posts[offset:offset + page_size]
+
+    data = []
+    for post in page_posts:
+        serialized = serialize_post(post, request)
+        if request and hasattr(request, 'user') and request.user.is_authenticated:
+            serialized['author']['is_own'] = post.author_id == request.user.id
+        else:
+            serialized['author']['is_own'] = False
+        data.append(serialized)
+
+    has_next = (offset + page_size) < total
+
+    return JsonResponse({
+        'posts': data,
+        'total': total,
+        'page': page,
+        'page_size': page_size,
+        'has_next': has_next,
+        'next_page': page + 1 if has_next else None,
+    })
 
 @jwt_optional
 def post_detail(request, post_id):

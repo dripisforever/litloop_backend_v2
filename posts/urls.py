@@ -13,6 +13,7 @@ from posts.views import (
     post_api_view,
 
     list_of_posts,
+    feed_view,
     post_detail,
     update_post_no_drf,
     delete_post_no_drf,
@@ -47,6 +48,7 @@ urlpatterns = [
 
 
     # ──────── FEED ────────
+    path('feed/', feed_view, name="post-feed"),
 
     # ──────── IMPRESSIONS ────────
     path('impressions/batch/', record_post_impressions, name='post-impressions-batch'),

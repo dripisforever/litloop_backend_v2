@@ -13,6 +13,7 @@ from .views_no_drf import (
     update_post_no_drf, 
     delete_post_no_drf,
     list_of_posts,
+    feed_view,
     post_detail,
     record_post_impressions,
     post_like_view,
