@@ -176,16 +176,17 @@ def user_username_videos_api(request, username):
 
     data = []
     for video in items:
-        gcs_url = r2_url(video.gcs_key)
+        r2 = r2_url(video.r2_key or video.gcs_key)
         thumb = video.thumbnail
         data.append({
             'id': video.id,
             'pk': video.pk,
             'video_id': video.id,
-            'gcs_url': gcs_url,
-            'url': gcs_url,
-            'file': gcs_url,
-            'file_path': video.gcs_key,
+            'r2_url': r2,
+            'gcs_url': r2,
+            'url': r2,
+            'file': r2,
+            'file_path': video.r2_key or video.gcs_key,
             'thumbnail': thumb,
             'thumbNail': thumb,
             'title': video.title or f'Video {video.id}',
