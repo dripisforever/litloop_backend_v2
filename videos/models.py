@@ -34,7 +34,8 @@ class Video(models.Model):
     impressions = models.IntegerField(default=0)
 
     # song = models.ForeignKey(Song, on_delete=models.CASCADE, blank=True)
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE, null=True, blank=True)
+    user     = models.ForeignKey('users.User', on_delete=models.CASCADE, null=True, blank=True)
+    comments = models.ManyToManyField('comments.Comment', through='VideoComment', blank=True, related_name='videos')
 
 
 class VideoWatchProgress(models.Model):
