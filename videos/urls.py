@@ -45,6 +45,7 @@ urlpatterns = [
 
 
     path('<int:video_id>/', views.video_detail_api, name='video-detail'),
+    path('<int:video_id>/comments/', views.create_video_comment, name='video-comment-create'),
 
     # API VIEWS
     # path('api/v1/search', views.MediaSearch.as_view()),
