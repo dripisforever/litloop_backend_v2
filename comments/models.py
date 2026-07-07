@@ -10,9 +10,9 @@ class Comment(MPTTModel):
     uid            = models.UUIDField(unique=True, default=uuid.uuid4)
     user           = models.ForeignKey("users.User", on_delete=models.CASCADE, db_index=True)
     parent         = TreeForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, related_name="children")
+    videos         = models.ManyToManyField('videos.Video', through='videos.VideoComment', blank=True, related_name='comments')
 
     # photos = models.ManyToManyField(User, through="CommentPhoto", related_name="comment_photos")
-    # videos = models.ManyToManyField(User, through="CommentVideo", related_name="comment_videos")
     # tracks = models.ManyToManyField(User, through="CommentTrack", related_name="comment_tracks")
 
     # user = models.ForeignKey('users.User', related_name='comments', on_delete=models.CASCADE)

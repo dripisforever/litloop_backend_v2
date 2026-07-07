@@ -48,12 +48,8 @@ class VideoWatchProgress(models.Model):
 
 
 class VideoComment(models.Model):
-    user       = models.ForeignKey(User, on_delete=models.CASCADE, db_index=True)
-    video      = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='comments')
-    text       = models.TextField()
-    parent     = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    comment    = models.ForeignKey('comments.Comment', on_delete=models.CASCADE, related_name='video_links')
+    video      = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='comment_links')
 
 class VideoPlaylist(models.Model):
     title  = models.CharField(max_length=900, null=True, blank=True)
