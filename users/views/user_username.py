@@ -176,7 +176,7 @@ def user_username_videos_api(request, username):
 
     data = []
     for video in items:
-        gcs_url = r2_url(video.gcs_key)
+        gcs_url = r2_url(video.gcs_key) or r2_url(video.s3_key)
         r2_url_val = r2_url(video.r2_key) or gcs_url
         thumb = video.thumbnail
         data.append({
