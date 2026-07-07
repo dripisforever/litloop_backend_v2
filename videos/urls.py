@@ -44,6 +44,8 @@ urlpatterns = [
     path('api/get_playback_time/', views.get_playback_time),
 
 
+    path('<int:video_id>/', views.video_detail_api, name='video-detail'),
+
     # API VIEWS
     # path('api/v1/search', views.MediaSearch.as_view()),
     # path('api/v1/video', views.MediaList.as_view()),
