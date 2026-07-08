@@ -1,7 +1,10 @@
 import uuid
-# import media.helpers as helpers
+from django.conf import settings
+from django.utils.html import strip_tags
+from django.urls import reverse
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
+from posts.helpers import produce_friendly_token
 
 class Comment(MPTTModel):
     add_date       = models.DateTimeField(auto_now_add=True)
@@ -28,7 +31,7 @@ class Comment(MPTTModel):
             self.text = self.text[: settings.MAX_CHARS_FOR_COMMENT]
         if not self.friendly_token:
             while True:
-                friendly_token = helpers.produce_friendly_token(26)
+                friendly_token = produce_friendly_token(26)
                 if not Comment.objects.filter(friendly_token=friendly_token):
                     self.friendly_token = friendly_token
                     break

@@ -11,6 +11,7 @@ LIKES_MODELS = {
 # ─── MISC ──────────────────────────────────────────────────────────────────
 FRIENDLY_TOKEN_LEN = 11
 FRIENDLY_COMMENT_TOKEN_LEN = 26
+MAX_CHARS_FOR_COMMENT = 5000
 MASK_IPS_FOR_ACTIONS = True
 RUNNING_STATE_STALE = 60 * 60 * 2
 MEDIA_IS_REVIEWED = True

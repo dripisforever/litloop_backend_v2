@@ -4,7 +4,6 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('comments', '0003_remove_comment_videos'),
         ('videos', '0007_alter_videocomment'),
     ]
 

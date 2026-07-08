@@ -1,7 +1,7 @@
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from posts.models import Post
+from posts.models import Post, PostLike
 from posts import redis_utils
 from posts.serializers_no_drf import serialize_post, handle_media_linking
 from users.auth_utils import jwt_required_testable, jwt_optional
@@ -159,9 +159,11 @@ def post_like_view(request, post_id):
 
     if redis_utils.is_liked(post_id, user.id):
         redis_utils.unlike_post(post_id, user.id)
+        PostLike.objects.filter(post=post, user=user).delete()
         liked = False
     else:
         redis_utils.like_post(post_id, user.id)
+        PostLike.objects.get_or_create(post=post, user=user)
         liked = True
 
     count = redis_utils.get_likes_count(post_id)

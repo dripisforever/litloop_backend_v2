@@ -11,6 +11,8 @@ from posts.views import (
     create_post_with_media,
     create_post_no_drf,
     post_api_view,
+    create_post_comment,
+    list_post_comments,
 
     list_of_posts,
     feed_view,
@@ -53,6 +55,10 @@ urlpatterns = [
     # ──────── IMPRESSIONS ────────
     path('impressions/batch/', record_post_impressions, name='post-impressions-batch'),
     path('<int:post_id>/like/', post_like_view, name='post-like'),
+
+    # ──────── COMMENTS ────────
+    path('<int:post_id>/comments/', list_post_comments, name='post-comments'),
+    path('<int:post_id>/comments/create/', create_post_comment, name='post-comment-create'),
 
     # ──────── MISC ────────
 ]

@@ -3,7 +3,7 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 from django.db.models import Count
-from notes.models import Page, Block, PageTag
+from notes.models import Page, Block, BlockTable, PageTag
 from users.auth_utils import jwt_required_testable
 
 # ── Pages ──────────────────────────────────────────
@@ -39,7 +39,8 @@ def create_page(request):
 def get_page(request, page_id):
     page = get_object_or_404(Page, id=page_id, author=request.user)
     data = page.to_dict()
-    data["blocks"] = [b.to_dict() for b in page.blocks.all()]
+    blocks = page.blocks.all().prefetch_related('table_data')
+    data["blocks"] = [b.to_dict() for b in blocks]
     return JsonResponse(data)
 
 
@@ -84,9 +85,16 @@ def create_block(request, page_id):
     try:
         page = Page.objects.get(id=page_id, author=request.user)
         data = json.loads(request.body)
+        block_type = data.get("type", "text")
         content = data.get("content", "")
         order = data.get("order", page.blocks.count())
-        block = Block.objects.create(page=page, content=content, order=order)
+        block = Block.objects.create(page=page, type=block_type, content=content, order=order)
+        if block_type == "table":
+            BlockTable.objects.create(
+                block=block,
+                columns=data.get("table_data", {}).get("columns", ["Column 1", "Column 2"]),
+                rows=data.get("table_data", {}).get("rows", [["", ""]]),
+            )
         return JsonResponse(block.to_dict(), status=201)
     except Page.DoesNotExist:
         return JsonResponse({"error": "Page not found"}, status=404)
@@ -125,6 +133,29 @@ def delete_block(request, block_id):
         return JsonResponse({"message": "Block deleted"})
     except Block.DoesNotExist:
         return JsonResponse({"error": "Block not found"}, status=404)
+
+
+# ── Table Blocks ────────────────────────────────────
+
+@csrf_exempt
+@jwt_required_testable
+def update_block_table(request, block_id):
+    if request.method != "PUT":
+        return HttpResponseBadRequest("Invalid method")
+    try:
+        block = Block.objects.get(id=block_id, page__author=request.user, type='table')
+        data = json.loads(request.body)
+        table_data, _ = BlockTable.objects.get_or_create(block=block)
+        if "columns" in data:
+            table_data.columns = data["columns"]
+        if "rows" in data:
+            table_data.rows = data["rows"]
+        table_data.save()
+        return JsonResponse(block.to_dict())
+    except Block.DoesNotExist:
+        return JsonResponse({"error": "Table block not found"}, status=404)
+    except json.JSONDecodeError:
+        return HttpResponseBadRequest("Invalid JSON")
 
 
 # ── Tags ────────────────────────────────────────────

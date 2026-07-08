@@ -32,6 +32,8 @@ class Post(models.Model):
     )
 
 
+    comments    = models.ManyToManyField('comments.Comment', through='PostComment', blank=True, related_name='posts')
+
     likes_count       = models.IntegerField(default=0)
     dislikes_count    = models.IntegerField(default=0)
     views_count       = models.IntegerField(default=0)
@@ -104,3 +106,7 @@ class PostPlaylist(models.Model):
     post        = models.ForeignKey(Post, on_delete=models.CASCADE)
     playlist    = models.ForeignKey('playlists.Playlist', on_delete=models.CASCADE)
     order       = models.IntegerField(default=1)
+
+class PostComment(models.Model):
+    comment    = models.ForeignKey('comments.Comment', on_delete=models.CASCADE, related_name='post_links')
+    post       = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comment_links')

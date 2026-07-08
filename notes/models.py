@@ -48,7 +48,12 @@ class PageTag(models.Model):
         }
 
 class Block(models.Model):
+    BLOCK_TYPES = [
+        ('text', 'Text'),
+        ('table', 'Table'),
+    ]
     page = models.ForeignKey(Page, related_name='blocks', on_delete=models.CASCADE)
+    type = models.CharField(max_length=20, choices=BLOCK_TYPES, default='text')
     content = models.TextField(default='', blank=True)
     order = models.PositiveIntegerField(default=0)
 
@@ -56,9 +61,22 @@ class Block(models.Model):
         ordering = ['order']
 
     def to_dict(self):
-        return {
+        d = {
             'id': self.id,
+            'type': self.type,
             'content': self.content,
             'order': self.order,
             'page_id': self.page_id,
         }
+        if self.type == 'table' and hasattr(self, 'table_data') and self.table_data:
+            d['table_data'] = {
+                'columns': self.table_data.columns,
+                'rows': self.table_data.rows,
+            }
+        return d
+
+
+class BlockTable(models.Model):
+    block = models.OneToOneField(Block, on_delete=models.CASCADE, related_name='table_data')
+    columns = models.JSONField(default=list)
+    rows = models.JSONField(default=list)

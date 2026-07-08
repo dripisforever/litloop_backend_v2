@@ -42,9 +42,4 @@ class Migration(migrations.Migration):
             name='video',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comment_links', to='videos.video'),
         ),
-        migrations.AddField(
-            model_name='comment',
-            name='videos',
-            field=models.ManyToManyField(blank=True, related_name='comments', through='videos.VideoComment', to='videos.video'),
-        ),
     ]
