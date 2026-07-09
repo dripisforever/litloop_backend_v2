@@ -12,6 +12,7 @@ from posts.views import (
     create_post_no_drf,
     post_api_view,
     create_post_comment,
+    detail_post_comment,
     list_post_comments,
 
     list_of_posts,
@@ -59,6 +60,7 @@ urlpatterns = [
     # ──────── COMMENTS ────────
     path('<int:post_id>/comments/', list_post_comments, name='post-comments'),
     path('<int:post_id>/comments/create/', create_post_comment, name='post-comment-create'),
+    path('<int:post_id>/comments/<int:comment_id>/', detail_post_comment, name='post-comment-detail'),
 
     # ──────── MISC ────────
 ]
