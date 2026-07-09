@@ -1,7 +1,7 @@
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from users.auth_utils import jwt_required
+from users.auth_utils import jwt_required, jwt_optional
 from .models import Community, CommunityMembership
 
 
@@ -138,3 +138,33 @@ def delete_community(request, community_id):
     community.delete()
 
     return JsonResponse({'deleted': True, 'community_id': community_id})
+
+
+# ─── DETAIL community (lookup by id or @name) ───
+
+@csrf_exempt
+@jwt_optional
+def detail_community(request, community_id):
+    if request.method != 'GET':
+        return JsonResponse({'error': 'Only GET allowed'}, status=405)
+
+    try:
+        community = Community.objects.get(id=community_id)
+    except (Community.DoesNotExist, ValueError):
+        return JsonResponse({'error': 'Community not found'}, status=404)
+
+    return JsonResponse(serialize_community(community, request))
+
+
+@csrf_exempt
+@jwt_optional
+def detail_community_by_name(request, community_name):
+    if request.method != 'GET':
+        return JsonResponse({'error': 'Only GET allowed'}, status=405)
+
+    try:
+        community = Community.objects.get(name=community_name)
+    except Community.DoesNotExist:
+        return JsonResponse({'error': 'Community not found'}, status=404)
+
+    return JsonResponse(serialize_community(community, request))
