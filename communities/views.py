@@ -75,3 +75,66 @@ def list_communities(request):
     return JsonResponse({
         'communities': [serialize_community(c, request) for c in communities],
     })
+
+
+# ─── JOIN community ───
+
+@csrf_exempt
+@jwt_required
+def join_community(request, community_id):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Only POST allowed'}, status=405)
+
+    try:
+        community = Community.objects.get(id=community_id)
+    except Community.DoesNotExist:
+        return JsonResponse({'error': 'Community not found'}, status=404)
+
+    if CommunityMembership.objects.filter(community=community, user=request.user).exists():
+        return JsonResponse({'error': 'Already a member'}, status=409)
+
+    CommunityMembership.objects.create(user=request.user, community=community, role='member')
+
+    return JsonResponse(serialize_community(community, request))
+
+
+# ─── LEAVE community ───
+
+@csrf_exempt
+@jwt_required
+def leave_community(request, community_id):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Only POST allowed'}, status=405)
+
+    try:
+        community = Community.objects.get(id=community_id)
+    except Community.DoesNotExist:
+        return JsonResponse({'error': 'Community not found'}, status=404)
+
+    deleted, _ = CommunityMembership.objects.filter(community=community, user=request.user).delete()
+    if not deleted:
+        return JsonResponse({'error': 'Not a member'}, status=400)
+
+    return JsonResponse({'left': True, 'community_id': community.id})
+
+
+# ─── DELETE community (admin only) ───
+
+@csrf_exempt
+@jwt_required
+def delete_community(request, community_id):
+    if request.method != 'DELETE':
+        return JsonResponse({'error': 'Only DELETE allowed'}, status=405)
+
+    try:
+        community = Community.objects.get(id=community_id)
+    except Community.DoesNotExist:
+        return JsonResponse({'error': 'Community not found'}, status=404)
+
+    membership = CommunityMembership.objects.filter(community=community, user=request.user).first()
+    if not membership or membership.role != 'admin':
+        return JsonResponse({'error': 'Only the admin can delete this community'}, status=403)
+
+    community.delete()
+
+    return JsonResponse({'deleted': True, 'community_id': community_id})

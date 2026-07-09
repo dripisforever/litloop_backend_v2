@@ -192,3 +192,33 @@ def reject_community_post(request, community_id, cp_id):
     cp.save()
 
     return JsonResponse(serialize_community_post(cp, request))
+
+
+# ─── DELETE a community post (requester if pending, or admin/mod) ───
+
+@csrf_exempt
+@jwt_required
+def delete_community_post(request, community_id, cp_id):
+    if request.method != 'DELETE':
+        return JsonResponse({'error': 'Only DELETE allowed'}, status=405)
+
+    try:
+        community = Community.objects.get(id=community_id)
+    except Community.DoesNotExist:
+        return JsonResponse({'error': 'Community not found'}, status=404)
+
+    try:
+        cp = CommunityPost.objects.get(id=cp_id, community=community)
+    except CommunityPost.DoesNotExist:
+        return JsonResponse({'error': 'Community post not found'}, status=404)
+
+    is_admin_mod = is_admin_or_mod(community, request.user)
+    is_requester = cp.requested_by == request.user
+
+    if not (is_admin_mod or (is_requester and cp.status == 'pending')):
+        return JsonResponse({'error': 'Not allowed to delete this post'}, status=403)
+
+    post = cp.post
+    cp.delete()
+
+    return JsonResponse({'deleted': True, 'post_id': post.id})

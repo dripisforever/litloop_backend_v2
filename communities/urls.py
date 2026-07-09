@@ -11,4 +11,10 @@ urlpatterns = [
     path('<int:community_id>/posts/pending/', post_views.list_pending_community_posts, name='community-posts-pending'),
     path('<int:community_id>/posts/<int:cp_id>/approve/', post_views.approve_community_post, name='community-post-approve'),
     path('<int:community_id>/posts/<int:cp_id>/reject/', post_views.reject_community_post, name='community-post-reject'),
+    path('<int:community_id>/posts/<int:cp_id>/', post_views.delete_community_post, name='community-post-delete'),
+
+    # Membership
+    path('<int:community_id>/join/', views.join_community, name='community-join'),
+    path('<int:community_id>/leave/', views.leave_community, name='community-leave'),
+    path('<int:community_id>/delete/', views.delete_community, name='community-delete'),
 ]
