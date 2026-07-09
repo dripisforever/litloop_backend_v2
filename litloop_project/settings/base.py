@@ -47,7 +47,7 @@ LOCAL_APPS = [
     'albums', 'artists', 'auth_cookie', 'comments', 'images',
     'chats', 'jobs', 'links', 'movies', 'notes', 'notifications',
     'photos', 'playlists', 'posts', 'queries', 'suggestions',
-    'todos', 'tracks', 'users', 'videos', 'views', 'websites', 'memes',
+    'todos', 'tracks', 'users', 'videos', 'views', 'websites', 'memes', 'communities',
 ]
 
 THIRD_PARTY_APPS = [

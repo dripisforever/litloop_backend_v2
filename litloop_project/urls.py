@@ -64,6 +64,7 @@ urlpatterns = [
     path('links/', include('links.urls')),
     path('notes/', include('notes.urls')),
     path('todos/', include('todos.urls')),
+    path('communities/', include('communities.urls')),
 
     path('<str:username>/posts/', user_posts_view, name='user-username-posts'),
 
