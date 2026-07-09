@@ -29,3 +29,4 @@ from .post_api import post_api_view
 
 from .create_post_comment import create_post_comment
 from .detail_post_comment import detail_post_comment
+from .list_post_comments import list_post_comments
