@@ -8,3 +8,5 @@ venv_3.9/
 dump.rdb
 celerybeat-schedule
 uploaded_media/
+
+*.sqlite3
