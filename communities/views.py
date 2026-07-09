@@ -5,6 +5,15 @@ from users.auth_utils import jwt_required, jwt_optional
 from .models import Community, CommunityMembership
 
 
+def get_membership(community, user):
+    return CommunityMembership.objects.filter(community=community, user=user).first()
+
+
+def is_admin(community, user):
+    membership = get_membership(community, user)
+    return membership and membership.role == 'admin'
+
+
 def serialize_community(community, request=None):
     user_is_member = False
     user_role = None
@@ -131,13 +140,51 @@ def delete_community(request, community_id):
     except Community.DoesNotExist:
         return JsonResponse({'error': 'Community not found'}, status=404)
 
-    membership = CommunityMembership.objects.filter(community=community, user=request.user).first()
+    membership = get_membership(community, request.user)
     if not membership or membership.role != 'admin':
         return JsonResponse({'error': 'Only the admin can delete this community'}, status=403)
 
     community.delete()
 
     return JsonResponse({'deleted': True, 'community_id': community_id})
+
+
+# ─── UPDATE community (admin only) ───
+
+@csrf_exempt
+@jwt_required
+def update_community(request, community_id):
+    if request.method not in ('PUT', 'PATCH'):
+        return JsonResponse({'error': 'Only PUT or PATCH allowed'}, status=405)
+
+    try:
+        community = Community.objects.get(id=community_id)
+    except Community.DoesNotExist:
+        return JsonResponse({'error': 'Community not found'}, status=404)
+
+    if not is_admin(community, request.user):
+        return JsonResponse({'error': 'Only the admin can update this community'}, status=403)
+
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+    name = (data.get('name') or '').strip()
+    if name and name != community.name:
+        if Community.objects.filter(name=name).exists():
+            return JsonResponse({'error': 'Community with this name already exists'}, status=409)
+        community.name = name
+
+    if 'description' in data:
+        community.description = (data.get('description') or '').strip()
+    if 'icon' in data:
+        community.icon = data.get('icon')
+    if 'banner' in data:
+        community.banner = data.get('banner')
+
+    community.save()
+    return JsonResponse(serialize_community(community, request))
 
 
 # ─── DETAIL community (lookup by id or @name) ───

@@ -17,6 +17,7 @@ urlpatterns = [
     path('<int:community_id>/join/', views.join_community, name='community-join'),
     path('<int:community_id>/leave/', views.leave_community, name='community-leave'),
     path('<int:community_id>/delete/', views.delete_community, name='community-delete'),
+    path('<int:community_id>/update/', views.update_community, name='community-update'),
 
     # Detail (by id or @name) — must be after all /<id>/... sub-paths
     path('<int:community_id>/', views.detail_community, name='community-detail'),
