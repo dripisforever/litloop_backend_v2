@@ -1,15 +1,24 @@
 from django.db import models
 from django.conf import settings
+from django.utils.text import slugify
 
 
 class Community(models.Model):
     name        = models.CharField(max_length=100, unique=True)
+    handle      = models.CharField(max_length=100, unique=True, blank=True)
     description = models.TextField(blank=True)
     icon        = models.CharField(max_length=500, blank=True, null=True)
     banner      = models.CharField(max_length=500, blank=True, null=True)
     created_by  = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='owned_communities')
     members     = models.ManyToManyField(settings.AUTH_USER_MODEL, through='CommunityMembership', related_name='communities')
     created_at  = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if not self.handle:
+            self.handle = slugify(self.name)[:100]
+            if not self.handle:
+                self.handle = f'community-{self.id or "new"}'
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name

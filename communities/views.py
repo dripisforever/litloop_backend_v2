@@ -28,6 +28,7 @@ def serialize_community(community, request=None):
     return {
         'id': community.id,
         'name': community.name,
+        'handle': community.handle,
         'description': community.description,
         'icon': community.icon,
         'banner': community.banner,
@@ -58,8 +59,13 @@ def create_community(request):
     if Community.objects.filter(name=name).exists():
         return JsonResponse({'error': 'Community with this name already exists'}, status=409)
 
+    handle = (data.get('handle') or '').strip()
+    if handle and Community.objects.filter(handle=handle).exists():
+        return JsonResponse({'error': 'Handle already taken'}, status=409)
+
     community = Community.objects.create(
         name=name,
+        handle=handle,
         description=(data.get('description') or '').strip(),
         icon=data.get('icon'),
         banner=data.get('banner'),
@@ -176,6 +182,12 @@ def update_community(request, community_id):
             return JsonResponse({'error': 'Community with this name already exists'}, status=409)
         community.name = name
 
+    handle = (data.get('handle') or '').strip()
+    if handle and handle != community.handle:
+        if Community.objects.filter(handle=handle).exists():
+            return JsonResponse({'error': 'Handle already taken'}, status=409)
+        community.handle = handle
+
     if 'description' in data:
         community.description = (data.get('description') or '').strip()
     if 'icon' in data:
@@ -210,7 +222,7 @@ def detail_community_by_name(request, community_name):
         return JsonResponse({'error': 'Only GET allowed'}, status=405)
 
     try:
-        community = Community.objects.get(name=community_name)
+        community = Community.objects.get(handle=community_name)
     except Community.DoesNotExist:
         return JsonResponse({'error': 'Community not found'}, status=404)
 
