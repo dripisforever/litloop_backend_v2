@@ -77,7 +77,9 @@ def request_community_post(request, community_id):
         post=post,
         community=community,
         requested_by=request.user,
-        status='pending',
+        status='approved' if is_admin_or_mod(community, request.user) else 'pending',
+        reviewed_by=request.user if is_admin_or_mod(community, request.user) else None,
+        reviewed_at=timezone.now() if is_admin_or_mod(community, request.user) else None,
     )
 
     return JsonResponse(serialize_community_post(cp, request), status=201)
