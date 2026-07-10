@@ -2,7 +2,7 @@ import os
 import uuid
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from chats.r2_utils import r2_upload_file
+from chats.r2_utils import r2_upload_file, r2_generate_presigned_url
 from users.auth_utils import jwt_required
 from communities.models import Community, CommunityMembership
 
@@ -37,14 +37,16 @@ def r2_upload_community_icon(request, community_id):
     filename = f"community_icons/{community.id}_{uuid.uuid4()}{ext}"
 
     try:
-        public_url = r2_upload_file(icon_file, filename, content_type=icon_file.content_type)
+        r2_upload_file(icon_file, filename, content_type=icon_file.content_type)
 
-        community.icon = public_url
+        presigned = r2_generate_presigned_url(filename, method='GET', expiration=604800)
+
+        community.icon = presigned
         community.save(update_fields=['icon'])
 
         return JsonResponse({
             'message': 'Community icon uploaded successfully',
-            'icon': public_url,
+            'icon': presigned,
             'storage': 'r2',
         })
     except Exception as e:
