@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views, post_views
-from .r2_upload_icon import r2_upload_community_icon
+from .r2_upload_icon import r2_upload_community_icon, r2_upload_community_banner
 
 urlpatterns = [
     path('create/', views.create_community, name='community-create'),
@@ -20,8 +20,9 @@ urlpatterns = [
     path('<int:community_id>/delete/', views.delete_community, name='community-delete'),
     path('<int:community_id>/update/', views.update_community, name='community-update'),
 
-    # Upload
+    # Uploads
     path('<int:community_id>/icon/r2/', r2_upload_community_icon, name='community-icon-upload'),
+    path('<int:community_id>/banner/r2/', r2_upload_community_banner, name='community-banner-upload'),
 
     # Detail (by id or @name) — must be after all /<id>/... sub-paths
     path('<int:community_id>/', views.detail_community, name='community-detail'),

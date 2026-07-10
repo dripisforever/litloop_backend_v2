@@ -51,3 +51,49 @@ def r2_upload_community_icon(request, community_id):
         })
     except Exception as e:
         return JsonResponse({'error': f'Failed to upload icon: {str(e)}'}, status=500)
+
+
+@csrf_exempt
+@jwt_required
+def r2_upload_community_banner(request, community_id):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Only POST allowed'}, status=405)
+
+    try:
+        community = Community.objects.get(id=community_id)
+    except Community.DoesNotExist:
+        return JsonResponse({'error': 'Community not found'}, status=404)
+
+    membership = CommunityMembership.objects.filter(community=community, user=request.user).first()
+    if not membership or membership.role != 'admin':
+        return JsonResponse({'error': 'Only admin can upload community banner'}, status=403)
+
+    if 'banner' not in request.FILES:
+        return JsonResponse({'error': 'No file provided in "banner" field.'}, status=400)
+
+    banner_file = request.FILES['banner']
+
+    if not banner_file.content_type.startswith('image/'):
+        return JsonResponse({'error': 'File must be an image.'}, status=400)
+
+    ext = os.path.splitext(banner_file.name)[1]
+    if not ext:
+        ext = '.jpg' if banner_file.content_type == 'image/jpeg' else '.png'
+
+    filename = f"community_banners/{community.id}_{uuid.uuid4()}{ext}"
+
+    try:
+        r2_upload_file(banner_file, filename, content_type=banner_file.content_type)
+
+        presigned = r2_generate_presigned_url(filename, method='GET', expiration=604800)
+
+        community.banner = presigned
+        community.save(update_fields=['banner'])
+
+        return JsonResponse({
+            'message': 'Community banner uploaded successfully',
+            'banner': presigned,
+            'storage': 'r2',
+        })
+    except Exception as e:
+        return JsonResponse({'error': f'Failed to upload banner: {str(e)}'}, status=500)
