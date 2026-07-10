@@ -63,7 +63,9 @@ def request_community_post(request, community_id):
     title = (data.get('title') or '').strip()
     description = (data.get('description') or '').strip()
     if not title and not description:
-        return JsonResponse({'error': 'title or description is required'}, status=400)
+        has_media = bool(data.get('photo_ids') or data.get('video_ids') or data.get('track_ids') or data.get('playlist_ids'))
+        if not has_media:
+            return JsonResponse({'error': 'title, description, or media is required'}, status=400)
 
     post = Post.objects.create(
         author=request.user,
