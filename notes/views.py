@@ -23,7 +23,7 @@ def create_page(request):
         return HttpResponseBadRequest("Invalid method")
     try:
         data = json.loads(request.body)
-        title = data.get("title", "").strip() or "Untitled"
+        title = data.get("title", "").strip() or ""
         parent_id = data.get("parent_id")
         parent = Page.objects.get(id=parent_id, author=request.user) if parent_id else None
         page = Page.objects.create(title=title, author=request.user, parent=parent)
@@ -53,7 +53,7 @@ def update_page(request, page_id):
         page = Page.objects.get(id=page_id, author=request.user)
         data = json.loads(request.body)
         if "title" in data:
-            page.title = data["title"].strip() or "Untitled"
+            page.title = data["title"].strip() or ""
         page.save()
         return JsonResponse(page.to_dict())
     except Page.DoesNotExist:
