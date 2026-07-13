@@ -15,6 +15,8 @@ def userlist(request):
             'username': user.username,
             'email': user.email,
             'avatar': user.avatar,
+            'is_staff': user.is_staff,
+            'is_superuser': user.is_superuser,
         })
 
     data = {

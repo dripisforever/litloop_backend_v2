@@ -33,6 +33,8 @@ def user_me_view(request):
         'email': user.email,
         'avatar': user.avatar,
         'is_verified': user.is_verified,
+        'is_staff': user.is_staff,
+        'is_superuser': user.is_superuser,
         'created_at': user.created_at.isoformat(),
     }
     return JsonResponse(data)

@@ -18,6 +18,7 @@ from users.views import (
     user_search_api
 )
 from users.views.current_user import user_me_view
+from users.views.user_role import update_user_role_view
 from users.views.avatar_upload_no_drf import upload_avatar_view
 from users.upload.gcs.gcs_avatar_views_no_drf import gcs_upload_avatar_view
 from users.upload.r2.r2_avatar_views_no_drf import r2_upload_avatar_view
@@ -43,6 +44,7 @@ urlpatterns = [
     path('list/', userlist, name='userlist'),
     path('search/', user_search_api, name='user_search'),
     path('<int:user_id>/', user_detail_api, name='user_detail'),
+    path('<int:user_id>/role/', update_user_role_view, name='user_role'),
     path('<int:user_id>/watchlist/', user_watchlist_api, name='user_watchlist'),
     
     path('<str:username>/', user_username_detail_api, name='user_username_detail'),
