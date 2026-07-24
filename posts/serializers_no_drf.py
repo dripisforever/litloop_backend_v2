@@ -14,10 +14,6 @@ def serialize_post(post, request=None):
     tracks = post.tracks.all().prefetch_related('artists')
     playlists_data = post.playlists.all().values('id', 'title')
 
-    is_liked = False
-    if request and hasattr(request, 'user') and request.user.is_authenticated:
-        is_liked = PostLike.objects.filter(post=post, user=request.user).exists()
-
     return {
         'id': post.id,
         'title': post.title,
@@ -28,7 +24,7 @@ def serialize_post(post, request=None):
             'username': post.author.username,
             'avatar': post.author.avatar,
         } if post.author else None,
-        'is_liked': is_liked,
+        'is_liked': False,
         'likes_count': post.likes_count,
         'dislikes_count': post.dislikes_count,
         'views_count': post.views_count,

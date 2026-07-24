@@ -90,14 +90,26 @@ def feed_view(request):
     page = max(page, 1)
     page_size = min(max(page_size, 1), 100)
 
-    posts = Post.objects.all().order_by('-created_at')
-    total = posts.count()
+    base_qs = Post.objects.select_related('author').prefetch_related(
+        'photos', 'videos', 'tracks__artists', 'playlists',
+    ).order_by('-created_at')
+
+    total = base_qs.count()
     offset = (page - 1) * page_size
-    page_posts = posts[offset:offset + page_size]
+    page_posts = base_qs[offset:offset + page_size]
+
+    liked_ids = set()
+    if request and hasattr(request, 'user') and request.user.is_authenticated:
+        liked_ids = set(
+            PostLike.objects.filter(
+                post__in=page_posts, user=request.user
+            ).values_list('post_id', flat=True)
+        )
 
     data = []
     for post in page_posts:
         serialized = serialize_post(post, request)
+        serialized['is_liked'] = post.id in liked_ids
         if request and hasattr(request, 'user') and request.user.is_authenticated:
             serialized['author']['is_own'] = post.author_id == request.user.id
         else:
